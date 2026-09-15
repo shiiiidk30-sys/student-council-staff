@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Council President Dashboard</title>
+<title>Student Council</title>
 <style>
 :root{--bg:#f4f7fb;--panel:#fff;--text:#172033;--muted:#6b7280;--primary:#263b73;--primary2:#405ca8;--line:#e5e7eb;--danger:#c83b3b;--shadow:0 10px 30px rgba(25,38,70,.08)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -21,8 +21,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary2);box-shadow:
 .nav button{width:100%;text-align:left;background:transparent;color:#dfe5f5;padding:12px;border-radius:10px;margin:3px 0}
 .nav button.active,.nav button:hover{background:rgba(255,255,255,.12);color:#fff}
 .logout{position:absolute;bottom:20px;left:16px;right:16px;background:#fff;color:#18254b;padding:11px;border-radius:10px;font-weight:700}
-.main{margin-left:245px;padding:28px;max-width:1500px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.top h1{margin:0;font-size:30px}.date{color:var(--muted)}
-.page{display:none}.page.active{display:block}
+.main{margin-left:245px;padding:28px;max-width:1500px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.top h1{margin:0;font-size:30px}.date{color:var(--muted)}.userbox{background:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:10px;font-size:13px}
+.page{display:none}.hidden{display:none!important}.error{color:#991b1b;background:#fee2e2;padding:10px;border-radius:9px;font-size:13px;margin-top:12px;display:none}.online{color:#166534;font-weight:800}.offline{color:var(--muted)}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.adminbadge{background:#e9edff;color:#263b73}.page.active{display:block}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
 .card{padding:20px}.card .label{color:var(--muted);font-size:13px;font-weight:700}.metric{font-size:32px;font-weight:800;margin-top:8px}
 .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}.panel{padding:20px;margin-bottom:20px}.panel h2{margin:0 0 16px;font-size:18px}
@@ -33,7 +33,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary2);box-shadow:
 .officers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.officer{padding:16px;border:1px solid var(--line);border-radius:12px}.avatar{width:42px;height:42px;border-radius:50%;background:#e9edff;display:grid;place-items:center;font-weight:800;color:var(--primary);margin-bottom:9px}
 .calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.dow,.day{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px}.dow{font-weight:800;text-align:center;background:#f8fafc}.day{min-height:100px;background:#fff}.day.today{background:#eef2ff}.daynum{font-weight:800}.cal-event{font-size:11px;background:#e9edff;color:#263b73;border-radius:5px;padding:4px;margin-top:5px;overflow:hidden}
 textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px solid #fed7aa;padding:12px;border-radius:10px;color:#9a3412;margin-bottom:16px}
-@media(max-width:950px){.sidebar{position:static;width:100%;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.logout{position:static;margin-top:10px}.main{margin-left:0;padding:18px}.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.officers{grid-template-columns:1fr 1fr}}
+@media(max-width:950px){.sidebar{position:static;width:100%;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.logout{position:static;margin-top:10px}.main{margin-left:0;padding:18px}.cards{grid-template-columns:repeat(2,1fr)}.grid2,.admin-grid{grid-template-columns:1fr}.officers{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.calendar{font-size:11px}.dow,.day{padding:5px}.day{min-height:75px}.officers{grid-template-columns:1fr}.sidebar{padding:12px}.brand{padding-bottom:10px}}
 </style>
 </head>
@@ -43,11 +43,11 @@ textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px 
   <div class="login-card">
     <div class="logo">🎓</div>
     <h1>Student Council</h1>
-    <p>President Dashboard</p>
-    <div class="field"><label>Your name</label><input id="loginName" placeholder="Enter your name"></div>
-    <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Create a local password"></div>
-    <button class="primary" onclick="login()">Enter Dashboard</button>
-    <div class="small">This login is stored only in this browser. It is not a secure online account.</div>
+    <p>Shared Council Dashboard</p>
+    <div class="field"><label>Email</label><input id="loginEmail" type="email" placeholder="Enter your school email" autocomplete="username"></div>
+    <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Enter your password" autocomplete="current-password"></div>
+    <button class="primary" onclick="login()">Enter Dashboard</button><div id="loginError" class="error"></div>
+    <div class="small">Use the account provided to you by Student Council administration.</div>
   </div>
 </div>
 
@@ -59,7 +59,7 @@ textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px 
       <button onclick="showPage('calendar',this)">📅 Calendar</button>
       <button onclick="showPage('tasksPage',this)">✅ Tasks</button>
       <button onclick="showPage('meetings',this)">🗓️ Meetings</button>
-      <button onclick="showPage('officers',this)">👥 Officers</button>
+      <button onclick="showPage('officers',this)">👥 Council Members</button><button id="adminNav" class="hidden" onclick="showPage('adminPage',this)">🛠️ Admin</button>
       <button onclick="showPage('deadlines',this)">⏰ Deadlines</button>
       <button onclick="showPage('notesPage',this)">📝 Notes</button>
     </div>
@@ -67,19 +67,19 @@ textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px 
   </aside>
 
   <main class="main">
-    <div class="top"><div><h1 id="pageTitle">President Dashboard</h1><div class="date" id="today"></div></div></div>
+    <div class="top"><div><h1 id="pageTitle">Student Council Dashboard</h1><div class="date" id="today"></div></div><div class="userbox">Signed in as <strong id="currentUserName">Member</strong> <span id="currentUserRole"></span></div></div>
 
     <section id="dashboard" class="page active">
       <div class="cards">
         <div class="card"><div class="label">Upcoming Events</div><div class="metric" id="eventCount">0</div></div>
         <div class="card"><div class="label">Open Tasks</div><div class="metric" id="taskCount">0</div></div>
         <div class="card"><div class="label">High Priority</div><div class="metric" id="highCount">0</div></div>
-        <div class="card"><div class="label">Officers</div><div class="metric" id="officerCount">0</div></div>
+        <div class="card"><div class="label">Council Members</div><div class="metric" id="officerCount">0</div></div>
       </div>
       <div class="grid2">
         <div class="panel"><h2>📆 Upcoming Schedule</h2><div id="dashEvents"></div></div>
         <div class="panel"><h2>🚨 Priority Tasks</h2><div id="dashTasks"></div></div>
-      </div>
+      </div><div class="panel"><h2>🟢 Active Members</h2><div id="activeMembers"></div></div>
     </section>
 
     <section id="calendar" class="page">
@@ -91,98 +91,79 @@ textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px 
     </section>
 
     <section id="tasksPage" class="page">
-      <div class="panel"><h2>➕ Add Task</h2><div class="row"><input id="taskText" placeholder="Task"><select id="taskPriority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select><input id="taskDue" type="date"></div><button class="primary" style="margin-top:10px" onclick="addTask()">Add Task</button></div>
+      <div class="panel"><h2>➕ Add Task</h2><div class="row"><input id="taskText" placeholder="Task"><select id="taskPriority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select><input id="taskDue" type="date"><select id="taskAssignee"><option value="">Unassigned</option></select></div><button class="primary" style="margin-top:10px" onclick="addTask()">Add Task</button></div>
       <div class="panel"><h2>✅ Task List</h2><div id="taskList"></div></div>
     </section>
 
     <section id="meetings" class="page">
-      <div class="panel"><h2>➕ Schedule Meeting</h2><div class="row"><input id="meetingName" placeholder="Meeting name"><input id="meetingDate" type="date"><input id="meetingTime" type="time"></div><input id="meetingLocation" placeholder="Location" style="margin-top:8px"><button class="primary" style="margin-top:10px" onclick="addMeeting()">Add Meeting</button></div>
+      <div class="panel"><h2>➕ Schedule Meeting</h2><div class="row"><input id="meetingName" placeholder="Meeting name"><input id="meetingDate" type="date"><input id="meetingTime" type="time"></div><input id="meetingLocation" placeholder="Location" style="margin-top:8px"><textarea id="meetingAgenda" placeholder="Agenda (optional)" style="margin-top:8px;min-height:90px"></textarea><button class="primary" style="margin-top:10px" onclick="addMeeting()">Add Meeting</button></div>
       <div class="panel"><h2>🗓️ Meetings</h2><div id="meetingList"></div></div>
     </section>
 
     <section id="officers" class="page">
-      <div class="panel"><h2>➕ Add Officer</h2><div class="row"><input id="officerName" placeholder="Name"><input id="officerRole" placeholder="Position / role"></div><button class="primary" style="margin-top:10px" onclick="addOfficer()">Add Officer</button></div>
-      <div class="panel"><h2>👥 Council Officers</h2><div class="officers" id="officerList"></div></div>
+      <div class="panel"><h2>👥 Council Members</h2><div class="notice">Student positions can be assigned after the election. Adult administrators are shown with their admin role.</div><div class="officers" id="officerList"></div></div>
     </section>
 
     <section id="deadlines" class="page">
-      <div class="panel"><h2>➕ Add Deadline</h2><div class="row"><input id="deadlineName" placeholder="Deadline"><input id="deadlineDate" type="date"></div><button class="primary" style="margin-top:10px" onclick="addDeadline()">Add Deadline</button></div>
+      <div class="panel"><h2>➕ Add Deadline</h2><div class="row"><input id="deadlineName" placeholder="Deadline"><input id="deadlineDate" type="date"></div><input id="deadlineDescription" placeholder="Description (optional)" style="margin-top:8px"><button class="primary" style="margin-top:10px" onclick="addDeadline()">Add Deadline</button></div>
       <div class="panel"><h2>⏰ Deadlines</h2><div id="deadlineList"></div></div>
     </section>
 
     <section id="notesPage" class="page">
-      <div class="panel"><h2>📝 President's Notes</h2><div class="notice">Use this for meeting notes, ideas, announcements, reminders, or plans.</div><textarea id="notes" placeholder="Write your notes here..."></textarea><button class="primary" style="margin-top:10px" onclick="saveNotes()">Save Notes</button></div>
+      <div class="panel"><h2>📝 Shared Council Notes</h2><div class="notice">These notes are shared with authenticated Student Council members.</div><input id="noteTitle" placeholder="Note title"><textarea id="noteContent" placeholder="Write a shared note..." style="margin-top:8px"></textarea><button class="primary" style="margin-top:10px" onclick="addNote()">Save Shared Note</button></div>
+      <div class="panel"><h2>📚 Saved Notes</h2><div id="notesList"></div></div>
+    </section>
+
+    <section id="adminPage" class="page">
+      <div class="panel"><h2>🛠️ Administrator Dashboard</h2><div class="notice">Administrator tools are visible only to administrator accounts.</div></div>
+      <div class="admin-grid"><div class="panel"><h2>🟢 Active Members</h2><div id="adminPresence"></div></div><div class="panel"><h2>👤 Council Accounts</h2><div id="adminUsers"></div></div></div>
+      <div class="panel"><h2>📋 Recent Activity</h2><div id="activityList"></div></div>
     </section>
   </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const KEY='sc_president_dashboard_v2';
-let data=JSON.parse(localStorage.getItem(KEY)||'null')||{events:[],tasks:[],meetings:[],officers:[],deadlines:[],notes:'',user:''};
-let viewDate=new Date();
-
-function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
-function login(){
-  const n=document.getElementById('loginName').value.trim(),p=document.getElementById('loginPass').value;
-  if(!n||!p){alert('Enter your name and a password.');return}
-  data.user=n;save();localStorage.setItem('sc_logged_in','1');document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';renderAll()
-}
-function logout(){localStorage.removeItem('sc_logged_in');location.reload()}
-function showPage(id,btn){
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
-  const names={dashboard:'President Dashboard',calendar:'Council Calendar',tasksPage:'Tasks',meetings:'Meetings',officers:'Officers',deadlines:'Deadlines',notesPage:'President Notes'};
-  document.getElementById('pageTitle').textContent=names[id]||'Dashboard';
-}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function addTask(){let t=document.getElementById('taskText').value.trim();if(!t)return;data.tasks.push({id:Date.now(),text:t,priority:document.getElementById('taskPriority').value,due:document.getElementById('taskDue').value,done:false});document.getElementById('taskText').value='';document.getElementById('taskDue').value='';save()}
-function toggleTask(id){let x=data.tasks.find(t=>t.id===id);if(x)x.done=!x.done;save()}
-function del(type,id){data[type]=data[type].filter(x=>x.id!==id);save()}
-function addMeeting(){let n=document.getElementById('meetingName').value.trim(),d=document.getElementById('meetingDate').value;if(!n||!d)return alert('Enter a meeting name and date.');data.meetings.push({id:Date.now(),name:n,date:d,time:document.getElementById('meetingTime').value,location:document.getElementById('meetingLocation').value});save()}
-function addOfficer(){let n=document.getElementById('officerName').value.trim(),r=document.getElementById('officerRole').value.trim();if(!n||!r)return alert('Enter a name and role.');data.officers.push({id:Date.now(),name:n,role:r});document.getElementById('officerName').value='';document.getElementById('officerRole').value='';save()}
-function addDeadline(){let n=document.getElementById('deadlineName').value.trim(),d=document.getElementById('deadlineDate').value;if(!n||!d)return alert('Enter a deadline and date.');data.deadlines.push({id:Date.now(),name:n,date:d});save()}
-function addEvent(){
-  let n=document.getElementById('eventName').value.trim(),d=document.getElementById('eventDate').value;
-  if(!n||!d)return alert('Enter an event name and date.');
-  data.events.push({id:Date.now(),name:n,date:d,time:document.getElementById('eventTime').value});
-  document.getElementById('eventName').value='';document.getElementById('eventDate').value='';document.getElementById('eventTime').value='';
-  save();
-}
-function saveNotes(){data.notes=document.getElementById('notes').value;save();alert('Notes saved!')}
-function fmtDate(d){if(!d)return '';return new Date(d+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}
-function renderTasks(){
-  const html=data.tasks.length?data.tasks.map(t=>`<div class="item"><div class="item-title" style="${t.done?'text-decoration:line-through;color:#888':''}">${esc(t.text)} <span class="badge ${t.priority}">${t.priority.toUpperCase()}</span></div><div class="meta">${t.due?'Due '+fmtDate(t.due):'No due date'}</div><div class="actions"><button class="success" onclick="toggleTask(${t.id})">${t.done?'Reopen':'Complete'}</button><button class="danger" onclick="del('tasks',${t.id})">Delete</button></div></div>`).join(''):'<div class="empty">No tasks yet.</div>';
-  document.getElementById('taskList').innerHTML=html;
-  document.getElementById('dashTasks').innerHTML=(data.tasks.filter(t=>!t.done&&t.priority==='high').slice(0,5).map(t=>`<div class="item"><div class="item-title">${esc(t.text)} <span class="badge high">HIGH</span></div><div class="meta">${t.due?'Due '+fmtDate(t.due):''}</div></div>`).join('')||'<div class="empty">No high-priority tasks.</div>')
-}
-function renderMeetings(){document.getElementById('meetingList').innerHTML=data.meetings.length?data.meetings.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(m=>`<div class="item"><div class="item-title">${esc(m.name)}</div><div class="meta">📅 ${fmtDate(m.date)} ${m.time?' • ⏰ '+esc(m.time):''} ${m.location?' • 📍 '+esc(m.location):''}</div><button class="danger" onclick="del('meetings',${m.id})">Delete</button></div>`).join(''):'<div class="empty">No meetings scheduled.</div>'}
-function renderOfficers(){document.getElementById('officerList').innerHTML=data.officers.length?data.officers.map(o=>`<div class="officer"><div class="avatar">${esc(o.name.charAt(0).toUpperCase())}</div><strong>${esc(o.name)}</strong><div class="meta">${esc(o.role)}</div><button class="danger" onclick="del('officers',${o.id})">Remove</button></div>`).join(''):'<div class="empty">Add your council officers.</div>'}
-function renderDeadlines(){document.getElementById('deadlineList').innerHTML=data.deadlines.length?data.deadlines.sort((a,b)=>a.date.localeCompare(b.date)).map(d=>`<div class="item"><div class="item-title">${esc(d.name)}</div><div class="meta">⏰ ${fmtDate(d.date)}</div><button class="danger" onclick="del('deadlines',${d.id})">Delete</button></div>`).join(''):'<div class="empty">No deadlines yet.</div>'}
-function renderCalendar(){
-  const y=viewDate.getFullYear(),m=viewDate.getMonth();document.getElementById('monthTitle').textContent=new Date(y,m,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});
-  const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),today=new Date();
-  let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="dow">${x}</div>`).join('');
-  for(let i=0;i<first;i++)h+='<div class="day"></div>';
-  for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,items=[...data.meetings.filter(x=>x.date===iso),...data.deadlines.filter(x=>x.date===iso)];let isToday=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;h+=`<div class="day ${isToday?'today':''}"><div class="daynum">${d}</div>${items.map(x=>`<div class="cal-event">${esc(x.name)}</div>`).join('')}</div>`}
-  document.getElementById('calendarGrid').innerHTML=h
-}
-function changeMonth(n){viewDate.setMonth(viewDate.getMonth()+n);renderCalendar()}
-function renderAll(){
-  document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  document.getElementById('eventCount').textContent=data.events.length+data.meetings.length;
-  document.getElementById('taskCount').textContent=data.tasks.filter(t=>!t.done).length;
-  document.getElementById('highCount').textContent=data.tasks.filter(t=>!t.done&&t.priority==='high').length;
-  document.getElementById('officerCount').textContent=data.officers.length;
-  renderTasks();renderMeetings();renderOfficers();renderDeadlines();renderCalendar();
-  document.getElementById('notes').value=data.notes||'';
-  const upcoming=[...data.events.map(x=>({...x,type:'Event'})),...data.meetings.map(x=>({...x,type:'Meeting'}))].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).slice(0,5);
-  document.getElementById('dashEvents').innerHTML=upcoming.length?upcoming.map(x=>`<div class="item"><div class="item-title">${esc(x.name)} <span class="badge low">${x.type.toUpperCase()}</span></div><div class="meta">📅 ${fmtDate(x.date)} ${x.time?' • '+esc(x.time):''}</div></div>`).join(''):'<div class="empty">No upcoming meetings.</div>';
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('notes').value=data.notes||'';
-  if(localStorage.getItem('sc_logged_in')==='1'&&data.user){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';renderAll()}
-});
+const SUPABASE_URL='https://atkujoqhuhxcfwebijbe.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_xvBJJZHfheW05NoFNc8c4Q_No5S1sKd';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let currentUser=null,profile=null,profiles=[],viewDate=new Date(),heartbeatTimer=null;
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmtDate=d=>d?new Date(d+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'';
+const fmtTime=t=>t?String(t).slice(0,5):'';
+const isAdmin=()=>['admin','president','advisor'].includes(profile?.role);
+const nameOf=p=>p?.full_name||'Student Council Member';
+function showError(m){const e=document.getElementById('loginError');e.textContent=m;e.style.display='block'}
+function clearError(){document.getElementById('loginError').style.display='none'}
+async function login(){clearError();const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPass').value;if(!email||!password)return showError('Enter your school email and password.');const {error}=await db.auth.signInWithPassword({email,password});if(error)return showError(error.message);await startApp()}
+async function logout(){if(currentUser)await db.from('presence').delete().eq('user_id',currentUser.id);if(heartbeatTimer)clearInterval(heartbeatTimer);await db.auth.signOut();location.reload()}
+async function startApp(){const {data:{user}}=await db.auth.getUser();if(!user)return;currentUser=user;const {data:p,error}=await db.from('profiles').select('*').eq('id',user.id).single();if(error||!p)return showError('Your Student Council profile could not be loaded.');profile=p;document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('currentUserName').textContent=nameOf(p);document.getElementById('currentUserRole').innerHTML=isAdmin()?' <span class="badge adminbadge">ADMIN</span>':'';document.getElementById('adminNav').classList.toggle('hidden',!isAdmin());await loadAll();await updatePresence();heartbeatTimer=setInterval(updatePresence,20000)}
+async function loadProfiles(){const {data}=await db.from('profiles').select('*').order('full_name');profiles=data||[];const s=document.getElementById('taskAssignee');if(s)s.innerHTML='<option value="">Unassigned</option>'+profiles.map(p=>`<option value="${p.id}">${esc(nameOf(p))}</option>`).join('')}
+async function loadAll(){await loadProfiles();await renderAll();await renderNotes();await renderPresence();if(isAdmin())await renderAdmin()}
+async function updatePresence(){if(!currentUser)return;await db.from('presence').upsert({user_id:currentUser.id,last_seen:new Date().toISOString()});await renderPresence();if(isAdmin()&&document.getElementById('adminPage').classList.contains('active'))await renderAdmin()}
+async function activity(action,details=''){if(currentUser)await db.from('activity').insert({user_id:currentUser.id,action,details})}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const n={dashboard:'Student Council Dashboard',calendar:'Council Calendar',tasksPage:'Tasks',meetings:'Meetings',officers:'Council Members',deadlines:'Deadlines',notesPage:'Shared Notes',adminPage:'Administrator Dashboard'};document.getElementById('pageTitle').textContent=n[id]||'Dashboard';if(id==='calendar')renderCalendarPage();if(id==='adminPage'&&isAdmin())renderAdmin()}
+async function addEvent(){const title=document.getElementById('eventName').value.trim(),date=document.getElementById('eventDate').value;if(!title||!date)return alert('Enter an event name and date.');const {error}=await db.from('events').insert({title,event_date:date,start_time:document.getElementById('eventTime').value||null,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created an event',title);['eventName','eventDate','eventTime'].forEach(id=>document.getElementById(id).value='');await renderAll()}
+async function addTask(){const title=document.getElementById('taskText').value.trim();if(!title)return;const {error}=await db.from('tasks').insert({title,description:'',assigned_to:document.getElementById('taskAssignee').value||null,due_date:document.getElementById('taskDue').value||null,completed:false,priority:document.getElementById('taskPriority').value,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a task',title);['taskText','taskDue'].forEach(id=>document.getElementById(id).value='');document.getElementById('taskAssignee').value='';await renderAll()}
+async function toggleTask(id,done){const {error}=await db.from('tasks').update({completed:!done}).eq('id',id);if(error)return alert(error.message);await activity(done?'Reopened a task':'Completed a task');await renderAll()}
+async function deleteRow(table,id){const {error}=await db.from(table).delete().eq('id',id);if(error)return alert(error.message);await activity('Deleted an item',table);await renderAll();await renderNotes()}
+async function addMeeting(){const title=document.getElementById('meetingName').value.trim(),date=document.getElementById('meetingDate').value;if(!title||!date)return alert('Enter a meeting name and date.');const {error}=await db.from('meetings').insert({title,meeting_date:date,start_time:document.getElementById('meetingTime').value||null,location:document.getElementById('meetingLocation').value.trim(),agenda:document.getElementById('meetingAgenda').value.trim(),created_by:currentUser.id});if(error)return alert(error.message);await activity('Scheduled a meeting',title);['meetingName','meetingDate','meetingTime','meetingLocation','meetingAgenda'].forEach(id=>document.getElementById(id).value='');await renderAll()}
+async function addDeadline(){const title=document.getElementById('deadlineName').value.trim(),date=document.getElementById('deadlineDate').value;if(!title||!date)return alert('Enter a deadline and date.');const {error}=await db.from('deadlines').insert({title,description:document.getElementById('deadlineDescription').value.trim(),deadline_date:date,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a deadline',title);['deadlineName','deadlineDate','deadlineDescription'].forEach(id=>document.getElementById(id).value='');await renderAll()}
+async function addNote(){const title=document.getElementById('noteTitle').value.trim(),content=document.getElementById('noteContent').value.trim();if(!title||!content)return alert('Enter a note title and note content.');const {error}=await db.from('notes').insert({title,content,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a shared note',title);document.getElementById('noteTitle').value='';document.getElementById('noteContent').value='';await renderNotes()}
+async function renderAll(){let [{data:E},{data:T},{data:M},{data:D}]=await Promise.all([db.from('events').select('*').order('event_date'),db.from('tasks').select('*').order('created_at',{ascending:false}),db.from('meetings').select('*').order('meeting_date'),db.from('deadlines').select('*').order('deadline_date')]);E=E||[];T=T||[];M=M||[];D=D||[];document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});document.getElementById('eventCount').textContent=E.length+M.length;document.getElementById('taskCount').textContent=T.filter(x=>!x.completed).length;document.getElementById('highCount').textContent=T.filter(x=>!x.completed&&x.priority==='high').length;document.getElementById('officerCount').textContent=profiles.length;renderTasks(T);renderMeetings(M);renderOfficers();renderDeadlines(D);renderCalendar(E,M,D);const up=[...E.map(x=>({...x,type:'Event',date:x.event_date,time:x.start_time,title:x.title})),...M.map(x=>({...x,type:'Meeting',date:x.meeting_date,time:x.start_time,title:x.title}))].sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).slice(0,5);document.getElementById('dashEvents').innerHTML=up.length?up.map(x=>`<div class="item"><div class="item-title">${esc(x.title)} <span class="badge low">${x.type.toUpperCase()}</span></div><div class="meta">📅 ${fmtDate(x.date)} ${x.time?' • ⏰ '+esc(fmtTime(x.time)):''}</div></div>`).join(''):'<div class="empty">No upcoming schedule items.</div>';const tasks=T.filter(x=>!x.completed).slice(0,5);document.getElementById('dashTasks').innerHTML=tasks.length?tasks.map(x=>`<div class="item"><div class="item-title">${esc(x.title)}</div><div class="meta">${x.due_date?'Due '+fmtDate(x.due_date):'No due date'}</div></div>`).join(''):'<div class="empty">No open tasks.</div>'}
+function renderTasks(T){document.getElementById('taskList').innerHTML=T.length?T.map(t=>{const a=profiles.find(p=>p.id===t.assigned_to),priority=t.priority||'medium';return `<div class="item"><div class="item-title" style="${t.completed?'text-decoration:line-through;color:#888':''}">${esc(t.title)} <span class="badge ${priority}">${priority.toUpperCase()}</span></div><div class="meta">${t.due_date?'Due '+fmtDate(t.due_date):'No due date'}${a?' • Assigned to '+esc(nameOf(a)):''}</div><div class="actions"><button class="success" onclick="toggleTask(${t.id},${t.completed})">${t.completed?'Reopen':'Complete'}</button>${isAdmin()?`<button class="danger" onclick="deleteRow('tasks',${t.id})">Delete</button>`:''}</div></div>`}).join(''):'<div class="empty">No tasks yet.</div>'}
+function renderMeetings(M){document.getElementById('meetingList').innerHTML=M.length?M.map(m=>`<div class="item"><div class="item-title">${esc(m.title)}</div><div class="meta">📅 ${fmtDate(m.meeting_date)} ${m.start_time?' • ⏰ '+esc(fmtTime(m.start_time)):''}${m.location?' • 📍 '+esc(m.location):''}</div>${m.agenda?`<div class="meta" style="margin-top:8px">Agenda: ${esc(m.agenda)}</div>`:''}${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('meetings',${m.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No meetings scheduled.</div>'}
+function renderDeadlines(D){document.getElementById('deadlineList').innerHTML=D.length?D.map(d=>`<div class="item"><div class="item-title">${esc(d.title)}</div><div class="meta">⏰ ${fmtDate(d.deadline_date)}</div>${d.description?`<div class="meta">${esc(d.description)}</div>`:''}${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('deadlines',${d.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No deadlines yet.</div>'}
+function renderOfficers(){document.getElementById('officerList').innerHTML=profiles.length?profiles.map(p=>{const initials=nameOf(p).trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();return `<div class="officer"><div class="avatar">${esc(initials)}</div><strong>${esc(nameOf(p))}</strong><div class="meta">${esc(p.role==='admin'?'Administrator':p.position||'Student Council Member')}</div>${p.grade_level?`<div class="meta">Grade ${esc(p.grade_level)}</div>`:''}</div>`}).join(''):'<div class="empty">No council members yet.</div>'}
+function renderCalendar(E,M,D){const y=viewDate.getFullYear(),m=viewDate.getMonth();document.getElementById('monthTitle').textContent=new Date(y,m,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),today=new Date();let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<first;i++)h+='<div class="day"></div>';for(let d=1;d<=days;d++){const iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,items=[...E.filter(x=>x.event_date===iso),...M.filter(x=>x.meeting_date===iso),...D.filter(x=>x.deadline_date===iso)],todayFlag=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;h+=`<div class="day ${todayFlag?'today':''}"><div class="daynum">${d}</div>${items.map(x=>`<div class="cal-event">${esc(x.title)}</div>`).join('')}</div>`}document.getElementById('calendarGrid').innerHTML=h}
+async function renderCalendarPage(){const [{data:E},{data:M},{data:D}]=await Promise.all([db.from('events').select('*'),db.from('meetings').select('*'),db.from('deadlines').select('*')]);renderCalendar(E||[],M||[],D||[])}
+function changeMonth(n){viewDate.setMonth(viewDate.getMonth()+n);renderCalendarPage()}
+async function renderNotes(){const {data}=await db.from('notes').select('*, profiles(full_name)').order('created_at',{ascending:false});const N=data||[];document.getElementById('notesList').innerHTML=N.length?N.map(n=>`<div class="item"><div class="item-title">${esc(n.title)}</div><div style="white-space:pre-wrap;margin-top:8px">${esc(n.content)}</div><div class="meta">Created by ${esc(n.profiles?.full_name||'Member')} • ${new Date(n.created_at).toLocaleString()}</div>${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('notes',${n.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No shared notes yet.</div>'}
+async function renderPresence(){const {data:P}=await db.from('presence').select('user_id,last_seen');const now=Date.now(),people=(P||[]).filter(x=>now-new Date(x.last_seen).getTime()<60000).map(x=>profiles.find(p=>p.id===x.user_id)).filter(Boolean);document.getElementById('activeMembers').innerHTML=people.length?people.map(p=>`<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta online">● Active now${isAdmin()&&p.role==='admin'?' • Administrator':''}</div></div>`).join(''):'<div class="empty">No members are currently active.</div>'}
+async function renderAdmin(){if(!isAdmin())return;const {data:P}=await db.from('presence').select('user_id,last_seen'),now=Date.now();document.getElementById('adminPresence').innerHTML=profiles.map(p=>{const r=(P||[]).find(x=>x.user_id===p.id),on=r&&now-new Date(r.last_seen).getTime()<60000;return `<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta ${on?'online':'offline'}">${on?'● Active now':r?'Last seen '+new Date(r.last_seen).toLocaleString():'Not active yet'}</div></div>`}).join('');document.getElementById('adminUsers').innerHTML=profiles.map(p=>`<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta">${esc(p.role)}</div></div>`).join('');const {data:A}=await db.from('activity').select('*, profiles(full_name)').order('created_at',{ascending:false}).limit(30);document.getElementById('activityList').innerHTML=(A||[]).length?(A||[]).map(a=>`<div class="item"><div class="item-title">${esc(a.action)}</div><div class="meta">${esc(a.profiles?.full_name||'Member')} • ${new Date(a.created_at).toLocaleString()}${a.details?' • '+esc(a.details):''}</div></div>`).join(''):'<div class="empty">No activity recorded yet.</div>'}
+setInterval(()=>{if(currentUser)renderPresence()},30000);
+db.auth.getSession().then(({data:{session}})=>{if(session)startApp()});
 </script>
+
 </body>
 </html>
