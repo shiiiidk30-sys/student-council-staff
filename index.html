@@ -117,6 +117,33 @@ textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px 
     <section id="adminPage" class="page">
       <div class="panel"><h2>🛠️ Administrator Dashboard</h2><div class="notice">Administrator tools are visible only to administrator accounts.</div></div>
       <div class="admin-grid"><div class="panel"><h2>🟢 Active Members</h2><div id="adminPresence"></div></div><div class="panel"><h2>👤 Council Accounts</h2><div id="adminUsers"></div></div></div>
+      <div class="panel">
+        <h2>➕ Add Council Member</h2>
+        <div class="notice">Administrators can create a login for an elected council member. The new member will appear in the Council Members directory automatically.</div>
+        <div class="grid2">
+          <input id="newMemberName" placeholder="Full name">
+          <input id="newMemberEmail" type="email" placeholder="School email">
+          <input id="newMemberPassword" type="password" placeholder="Temporary password (8+ characters)">
+          <select id="newMemberGrade">
+            <option value="">Grade (optional)</option>
+            <option value="6">Grade 6</option>
+            <option value="7">Grade 7</option>
+            <option value="8">Grade 8</option>
+          </select>
+          <select id="newMemberPosition">
+            <option value="">Position</option>
+            <option>President</option>
+            <option>Vice President</option>
+            <option>Secretary</option>
+            <option>Treasurer</option>
+            <option>Grade 6 Representative</option>
+            <option>Grade 7 Representative</option>
+            <option>Grade 8 Representative</option>
+          </select>
+        </div>
+        <button class="primary" style="margin-top:10px" onclick="createCouncilMember()">Create Council Member Account</button>
+        <div id="memberCreateMessage" class="notice hidden" style="margin-top:10px"></div>
+      </div>
       <div class="panel"><h2>📋 Recent Activity</h2><div id="activityList"></div></div>
     </section>
   </main>
@@ -160,6 +187,43 @@ async function renderCalendarPage(){const [{data:E},{data:M},{data:D}]=await Pro
 function changeMonth(n){viewDate.setMonth(viewDate.getMonth()+n);renderCalendarPage()}
 async function renderNotes(){const {data}=await db.from('notes').select('*, profiles(full_name)').order('created_at',{ascending:false});const N=data||[];document.getElementById('notesList').innerHTML=N.length?N.map(n=>`<div class="item"><div class="item-title">${esc(n.title)}</div><div style="white-space:pre-wrap;margin-top:8px">${esc(n.content)}</div><div class="meta">Created by ${esc(n.profiles?.full_name||'Member')} • ${new Date(n.created_at).toLocaleString()}</div>${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('notes',${n.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No shared notes yet.</div>'}
 async function renderPresence(){const {data:P}=await db.from('presence').select('user_id,last_seen');const now=Date.now(),people=(P||[]).filter(x=>now-new Date(x.last_seen).getTime()<60000).map(x=>profiles.find(p=>p.id===x.user_id)).filter(Boolean);document.getElementById('activeMembers').innerHTML=people.length?people.map(p=>`<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta online">● Active now${isAdmin()&&p.role==='admin'?' • Administrator':''}</div></div>`).join(''):'<div class="empty">No members are currently active.</div>'}
+async function createCouncilMember(){
+  if(!isAdmin()) return alert('Administrator access required.');
+  const full_name=document.getElementById('newMemberName').value.trim();
+  const email=document.getElementById('newMemberEmail').value.trim();
+  const password=document.getElementById('newMemberPassword').value;
+  const grade=document.getElementById('newMemberGrade').value;
+  const position=document.getElementById('newMemberPosition').value;
+  const msg=document.getElementById('memberCreateMessage');
+  msg.classList.remove('hidden');
+  msg.textContent='Creating account...';
+  if(!full_name||!email||!password||!position){
+    msg.textContent='Please enter the name, email, password, and position.';
+    return;
+  }
+  if(password.length<8){
+    msg.textContent='Password must be at least 8 characters.';
+    return;
+  }
+  const {data,error}=await db.functions.invoke('create-council-member',{
+    body:{full_name,email,password,position,grade_level:grade?Number(grade):null}
+  });
+  if(error){
+    msg.textContent='Could not create the account: '+(error.message||'Unknown error');
+    return;
+  }
+  if(data?.error){
+    msg.textContent='Could not create the account: '+data.error;
+    return;
+  }
+  msg.textContent=data?.message||'Council member account created successfully.';
+  ['newMemberName','newMemberEmail','newMemberPassword'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('newMemberGrade').value='';
+  document.getElementById('newMemberPosition').value='';
+  await loadProfiles();
+  await renderAll();
+  await renderAdmin();
+}
 async function renderAdmin(){if(!isAdmin())return;const {data:P}=await db.from('presence').select('user_id,last_seen'),now=Date.now();document.getElementById('adminPresence').innerHTML=profiles.map(p=>{const r=(P||[]).find(x=>x.user_id===p.id),on=r&&now-new Date(r.last_seen).getTime()<60000;return `<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta ${on?'online':'offline'}">${on?'● Active now':r?'Last seen '+new Date(r.last_seen).toLocaleString():'Not active yet'}</div></div>`}).join('');document.getElementById('adminUsers').innerHTML=profiles.map(p=>`<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta">${esc(p.role)}</div></div>`).join('');const {data:A}=await db.from('activity').select('*, profiles(full_name)').order('created_at',{ascending:false}).limit(30);document.getElementById('activityList').innerHTML=(A||[]).length?(A||[]).map(a=>`<div class="item"><div class="item-title">${esc(a.action)}</div><div class="meta">${esc(a.profiles?.full_name||'Member')} • ${new Date(a.created_at).toLocaleString()}${a.details?' • '+esc(a.details):''}</div></div>`).join(''):'<div class="empty">No activity recorded yet.</div>'}
 setInterval(()=>{if(currentUser)renderPresence()},30000);
 db.auth.getSession().then(({data:{session}})=>{if(session)startApp()});
