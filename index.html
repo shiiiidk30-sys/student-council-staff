@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Council</title>
 <style>
-:root{--bg:#f4f7fb;--panel:#fff;--text:#172033;--muted:#6b7280;--primary:#263b73;--primary2:#405ca8;--line:#e5e7eb;--danger:#c83b3b;--shadow:0 10px 30px rgba(25,38,70,.08)}
+:root{--bg:#f4f7fb;--panel:#fff;--text:#172033;--muted:#6b7280;--primary:#263b73;--primary2:#405ca8;--line:#e5e7eb;--danger:#c83b3b;--shadow:0 10px 30px rgba(25,38,70,.08);--success:#166534;--warn:#92400e}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
 button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
 .login{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#17244a,#405ca8)}
@@ -14,288 +14,243 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
 .field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
 input,select,textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(64,92,168,.12)}
-.primary{background:var(--primary);color:#fff;padding:12px 16px;border-radius:10px;font-weight:700;width:100%}
-.small{font-size:12px;color:var(--muted);margin-top:12px;text-align:center}
-.app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#18254b;color:#fff;padding:24px 16px}
-.brand{font-weight:800;font-size:19px;padding:8px 10px 24px}.brand span{font-size:27px}
-.nav button{width:100%;text-align:left;background:transparent;color:#dfe5f5;padding:12px;border-radius:10px;margin:3px 0}
-.nav button.active,.nav button:hover{background:rgba(255,255,255,.12);color:#fff}
-.logout{position:absolute;bottom:20px;left:16px;right:16px;background:#fff;color:#18254b;padding:11px;border-radius:10px;font-weight:700}
-.main{margin-left:245px;padding:28px;max-width:1500px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.top h1{margin:0;font-size:30px}.date{color:var(--muted)}.userbox{background:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:10px;font-size:13px}
-.page{display:none}.hidden{display:none!important}.error{color:#991b1b;background:#fee2e2;padding:10px;border-radius:9px;font-size:13px;margin-top:12px;display:none}.online{color:#166534;font-weight:800}.offline{color:var(--muted)}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.adminbadge{background:#e9edff;color:#263b73}.page.active{display:block}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
-.card{padding:20px}.card .label{color:var(--muted);font-size:13px;font-weight:700}.metric{font-size:32px;font-weight:800;margin-top:8px}
-.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}.panel{padding:20px;margin-bottom:20px}.panel h2{margin:0 0 16px;font-size:18px}
-.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{padding:9px 12px;border-radius:9px}
-.secondary{background:#eef2ff;color:var(--primary)}.danger{background:#fee2e2;color:#991b1b}.success{background:#dcfce7;color:#166534}
-.item{border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0;background:#fbfcff}.item-title{font-weight:800}.meta{color:var(--muted);font-size:13px;margin-top:5px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800;margin-left:5px}.high{background:#fee2e2;color:#991b1b}.medium{background:#fef3c7;color:#92400e}.low{background:#dcfce7;color:#166534}
-.empty{color:var(--muted);text-align:center;padding:20px}
-.officers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.officer{padding:16px;border:1px solid var(--line);border-radius:12px}.avatar{width:42px;height:42px;border-radius:50%;background:#e9edff;display:grid;place-items:center;font-weight:800;color:var(--primary);margin-bottom:9px}
-.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.dow,.day{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px}.dow{font-weight:800;text-align:center;background:#f8fafc}.day{min-height:100px;background:#fff}.day.today{background:#eef2ff}.daynum{font-weight:800}.cal-event{font-size:11px;background:#e9edff;color:#263b73;border-radius:5px;padding:4px;margin-top:5px;overflow:hidden}
-textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px solid #fed7aa;padding:12px;border-radius:10px;color:#9a3412;margin-bottom:16px}
-@media(max-width:950px){.sidebar{position:static;width:100%;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.logout{position:static;margin-top:10px}.main{margin-left:0;padding:18px}.cards{grid-template-columns:repeat(2,1fr)}.grid2,.admin-grid{grid-template-columns:1fr}.officers{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.calendar{font-size:11px}.dow,.day{padding:5px}.day{min-height:75px}.officers{grid-template-columns:1fr}.sidebar{padding:12px}.brand{padding-bottom:10px}}
-
-.tutorial-overlay{position:fixed;inset:0;background:rgba(15,23,42,.62);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}
-.tutorial-card{width:min(620px,100%);background:#fff;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.25);padding:28px}
-.tutorial-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.tutorial-step{font-size:13px;color:var(--muted);font-weight:700}
-.tutorial-icon{font-size:42px;margin-bottom:8px}
-.tutorial-card h2{margin:6px 0 10px;font-size:25px}
-.tutorial-card p{color:#4b5563;line-height:1.6;margin:0 0 18px}
-.tutorial-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px}
-.tutorial-actions .right{display:flex;gap:8px}
-.tutorial-dots{display:flex;gap:6px;margin-top:18px}
-.tutorial-dot{width:8px;height:8px;border-radius:50%;background:#d1d5db}
-.tutorial-dot.active{background:var(--primary);width:22px;border-radius:8px}
+.primary{background:var(--primary);color:#fff;padding:12px 16px;border-radius:10px;font-weight:700;width:100%}.small{font-size:12px;color:var(--muted);margin-top:12px;text-align:center}
+.app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:#18254b;color:#fff;padding:20px 14px;overflow:auto}
+.brand{font-weight:800;font-size:19px;padding:8px 10px 18px}.brand span{font-size:27px}.nav-group{margin-top:14px}.nav-group-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#9aa9d1;padding:8px 10px}.nav button{width:100%;text-align:left;background:transparent;color:#dfe5f5;padding:11px 12px;border-radius:10px;margin:2px 0}.nav button.active,.nav button:hover{background:rgba(255,255,255,.12);color:#fff}.logout{position:absolute;bottom:14px;left:14px;right:14px;background:#fff;color:#18254b;padding:11px;border-radius:10px;font-weight:700}
+.main{margin-left:250px;padding:28px;max-width:1600px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.top h1{margin:0;font-size:30px}.date{color:var(--muted);margin-top:3px}.userbox{background:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:10px;font-size:13px}
+.page{display:none}.hidden{display:none!important}.error{color:#991b1b;background:#fee2e2;padding:10px;border-radius:9px;font-size:13px;margin-top:12px;display:none}.online{color:#166534;font-weight:800}.offline{color:var(--muted)}
+.admin-grid,.grid2,.grid3{display:grid;gap:16px}.admin-grid{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:repeat(3,1fr)}
+.page.active{display:block}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:20px}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.card{padding:18px}.card .label{color:var(--muted);font-size:13px;font-weight:700}.metric{font-size:30px;font-weight:800;margin-top:8px}
+.grid2-main{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}.panel{padding:20px;margin-bottom:20px}.panel h2{margin:0 0 16px;font-size:18px}.panel h3{margin:16px 0 10px;font-size:15px}.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{padding:9px 12px;border-radius:9px}.secondary{background:#eef2ff;color:var(--primary)}.danger{background:#fee2e2;color:#991b1b}.success{background:#dcfce7;color:#166534}.muted-btn{background:#f3f4f6;color:#374151}.item{border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0;background:#fbfcff}.item-title{font-weight:800}.meta{color:var(--muted);font-size:13px;margin-top:5px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800;margin-left:5px}.high{background:#fee2e2;color:#991b1b}.medium{background:#fef3c7;color:#92400e}.low{background:#dcfce7;color:#166534}.adminbadge{background:#e9edff;color:#263b73}.empty{color:var(--muted);text-align:center;padding:20px}.notice{background:#fff7ed;border:1px solid #fed7aa;padding:12px;border-radius:10px;color:#9a3412;margin-bottom:16px}.subtle{background:#f8fafc;border:1px solid var(--line);padding:10px;border-radius:10px}.comment{border-top:1px solid var(--line);padding:9px 0}.comment:first-child{border-top:0}.comment-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.comment-form textarea{min-height:65px}.comment-form button{padding:10px 12px;background:#eef2ff;color:var(--primary);border-radius:9px;font-weight:700}.comments-box{margin-top:12px}.comment-author{font-weight:800;font-size:13px}.comment-time{font-size:11px;color:var(--muted)}
+.officers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.officer{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fff}.avatar{width:42px;height:42px;border-radius:50%;background:#e9edff;display:grid;place-items:center;font-weight:800;color:var(--primary);margin-bottom:9px}.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:5px}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.dow,.day{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px}.dow{font-weight:800;text-align:center;background:#f8fafc}.day{min-height:100px;background:#fff}.day.today{background:#eef2ff}.daynum{font-weight:800}.cal-event{font-size:11px;background:#e9edff;color:#263b73;border-radius:5px;padding:4px;margin-top:5px;overflow:hidden}.cal-event small{display:block;color:#4b5563}
+textarea{min-height:130px;resize:vertical}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;border-bottom:1px solid var(--line);padding:10px;font-size:13px;vertical-align:top}.table th{color:var(--muted)}.document-card{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.document-card .grow{flex:1}.pill{background:#f3f4f6;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:700;color:#374151}.kpi{display:flex;justify-content:space-between;align-items:center}.hero{background:linear-gradient(135deg,#18254b,#405ca8);color:#fff}.hero .meta{color:#dbe4ff}.hero .panel-title{font-size:20px;font-weight:800}
+.tutorial-overlay{position:fixed;inset:0;background:rgba(15,23,42,.62);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}.tutorial-card{width:min(620px,100%);background:#fff;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.25);padding:28px}.tutorial-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.tutorial-step{font-size:13px;color:var(--muted);font-weight:700}.tutorial-icon{font-size:42px;margin-bottom:8px}.tutorial-card h2{margin:6px 0 10px;font-size:25px}.tutorial-card p{color:#4b5563;line-height:1.6;margin:0 0 18px}.tutorial-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px}.tutorial-actions .right{display:flex;gap:8px}.tutorial-dots{display:flex;gap:6px;margin-top:18px}.tutorial-dot{width:8px;height:8px;border-radius:50%;background:#d1d5db}.tutorial-dot.active{background:var(--primary);width:22px;border-radius:8px}
+.toast{position:fixed;right:20px;bottom:20px;z-index:10000;background:#18254b;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:var(--shadow);display:none;max-width:360px}
+@media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}}@media(max-width:950px){.sidebar{position:static;width:100%;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.logout{position:static;margin-top:10px}.main{margin-left:0;padding:18px}.cards{grid-template-columns:repeat(2,1fr)}.grid2-main,.admin-grid,.grid2{grid-template-columns:1fr}.officers{grid-template-columns:1fr 1fr}}@media(max-width:600px){.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.calendar{font-size:11px}.dow,.day{padding:5px}.day{min-height:75px}.officers{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.comment-form{grid-template-columns:1fr}.sidebar{padding:10px}.brand{padding-bottom:8px}.logout{margin-top:6px}}
 </style>
 </head>
 <body>
-
 <div id="login" class="login">
   <div class="login-card">
-    <div class="logo">🎓</div>
+    <div class="logo">🏛️</div>
     <h1>Student Council</h1>
-    <p>Shared Council Dashboard</p>
-    <div class="field"><label>Email</label><input id="loginEmail" type="email" placeholder="Enter your school email" autocomplete="username"></div>
-    <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Enter your password" autocomplete="current-password"></div>
-    <button class="primary" onclick="login()">Enter Dashboard</button><div id="loginError" class="error"></div>
-    <div class="small">Use the account provided to you by Student Council administration.</div>
+    <p>Shared Council Workspace</p>
+    <div class="field"><label for="loginEmail">School email</label><input id="loginEmail" type="email" placeholder="you@stu.kippmemphis.org"></div>
+    <div class="field"><label for="loginPass">Password</label><input id="loginPass" type="password" placeholder="Password"></div>
+    <button class="primary" onclick="login()">Enter Dashboard</button>
+    <div id="loginError" class="error"></div>
+    <div class="small">Your account is managed by authorized Student Council administrators.</div>
   </div>
 </div>
 
 <div id="app" class="app">
   <aside class="sidebar">
-    <div class="brand"><span>🎓</span><br>Student Council</div>
-    <div class="nav">
+    <div class="brand"><span>🏛️</span> Student Council</div>
+    <div class="nav-group"><div class="nav-group-label">Workspace</div><div class="nav">
       <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
       <button onclick="showPage('calendar',this)">📅 Calendar</button>
       <button onclick="showPage('tasksPage',this)">✅ Tasks</button>
       <button onclick="showPage('meetings',this)">🗓️ Meetings</button>
-      <button onclick="showPage('officers',this)">👥 Council Members</button><button id="adminNav" class="hidden" onclick="showPage('adminPage',this)">🛠️ Admin</button>
       <button onclick="showPage('deadlines',this)">⏰ Deadlines</button>
-      <button onclick="showPage('notesPage',this)">📝 Notes</button><button onclick="openTutorial()">📘 Tutorial</button>
-    </div>
-    <button class="logout" onclick="logout()">Log Out</button>
+      <button onclick="showPage('notesPage',this)">📝 Notes</button>
+      <button onclick="showPage('documentsPage',this)">📚 Documents</button>
+      <button onclick="showPage('activityPage',this)">📋 Activity</button>
+      <button onclick="showPage('officers',this)">👥 Council Members</button>
+    </div></div>
+    <div class="nav-group" id="adminNav"><div class="nav-group-label">Administration</div><div class="nav">
+      <button onclick="showPage('adminPage',this)">🛠️ Admin</button>
+    </div></div>
+    <button class="logout" onclick="logout()">Sign out</button>
   </aside>
 
   <main class="main">
     <div class="top"><div><h1 id="pageTitle">Student Council Dashboard</h1><div class="date" id="today"></div></div><div class="userbox">Signed in as <strong id="currentUserName">Member</strong> <span id="currentUserRole"></span></div></div>
 
     <section id="dashboard" class="page active">
+      <div class="panel hero"><div class="panel-title">Council Command Center</div><div class="meta">One place to see what is happening, what needs to get done, and what changed recently.</div></div>
       <div class="cards">
-        <div class="card"><div class="label">Upcoming Events</div><div class="metric" id="eventCount">0</div></div>
         <div class="card"><div class="label">Open Tasks</div><div class="metric" id="taskCount">0</div></div>
+        <div class="card"><div class="label">Upcoming Schedule</div><div class="metric" id="eventCount">0</div></div>
         <div class="card"><div class="label">High Priority</div><div class="metric" id="highCount">0</div></div>
         <div class="card"><div class="label">Council Members</div><div class="metric" id="officerCount">0</div></div>
+        <div class="card"><div class="label">Active Now</div><div class="metric" id="activeCount">0</div></div>
       </div>
-      <div class="grid2">
-        <div class="panel"><h2>📆 Upcoming Schedule</h2><div id="dashEvents"></div></div>
-        <div class="panel"><h2>🚨 Priority Tasks</h2><div id="dashTasks"></div></div>
-      </div><div class="panel"><h2>🟢 Active Members</h2><div id="activeMembers"></div></div>
+      <div class="grid2-main">
+        <div>
+          <div class="panel"><h2>📅 Upcoming</h2><div id="dashEvents"></div></div>
+          <div class="panel"><h2>✅ Open Work</h2><div id="dashTasks"></div></div>
+        </div>
+        <div>
+          <div class="panel"><h2>🟢 Active Members</h2><div id="activeMembers"></div></div>
+          <div class="panel"><h2>📋 Recent Council Activity</h2><div id="dashActivity"></div></div>
+        </div>
+      </div>
     </section>
 
     <section id="calendar" class="page">
-      <div class="panel"><h2>➕ Add Calendar Event</h2><div class="row"><input id="eventName" placeholder="Event name"><input id="eventDate" type="date"><input id="eventTime" type="time"></div><button class="primary" style="margin-top:10px" onclick="addEvent()">Add Event</button></div>
-      <div class="panel">
-        <div class="calendar-head"><button class="secondary" onclick="changeMonth(-1)">←</button><h2 id="monthTitle"></h2><button class="secondary" onclick="changeMonth(1)">→</button></div>
-        <div class="calendar" id="calendarGrid"></div>
-      </div>
+      <div class="panel"><h2>➕ Add Event</h2><div class="grid2"><input id="eventName" placeholder="Event name"><input id="eventDate" type="date"><input id="eventTime" type="time"><input id="eventLocation" placeholder="Location"><textarea id="eventDescription" placeholder="Description" style="min-height:90px"></textarea><div></div></div><button class="primary" style="margin-top:10px" onclick="addEvent()">Add Event</button></div>
+      <div class="panel"><div class="calendar-head"><button class="secondary" onclick="changeMonth(-1)">←</button><h2 id="monthTitle"></h2><button class="secondary" onclick="changeMonth(1)">→</button></div><div class="calendar" id="calendarGrid"></div></div>
     </section>
 
     <section id="tasksPage" class="page">
-      <div class="panel"><h2>➕ Add Task</h2><div class="row"><input id="taskText" placeholder="Task"><select id="taskPriority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select><input id="taskDue" type="date"><select id="taskAssignee"><option value="">Unassigned</option></select></div><button class="primary" style="margin-top:10px" onclick="addTask()">Add Task</button></div>
+      <div class="panel"><h2>➕ Add Task</h2><div class="grid2"><input id="taskText" placeholder="Task title"><select id="taskPriority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select><input id="taskDue" type="date"><select id="taskAssignee"><option value="">Unassigned</option></select><textarea id="taskDescription" placeholder="Task details" style="min-height:90px"></textarea><div></div></div><button class="primary" style="margin-top:10px" onclick="addTask()">Add Task</button></div>
       <div class="panel"><h2>✅ Task List</h2><div id="taskList"></div></div>
     </section>
 
     <section id="meetings" class="page">
-      <div class="panel"><h2>➕ Schedule Meeting</h2><div class="row"><input id="meetingName" placeholder="Meeting name"><input id="meetingDate" type="date"><input id="meetingTime" type="time"></div><input id="meetingLocation" placeholder="Location" style="margin-top:8px"><textarea id="meetingAgenda" placeholder="Agenda (optional)" style="margin-top:8px;min-height:90px"></textarea><button class="primary" style="margin-top:10px" onclick="addMeeting()">Add Meeting</button></div>
+      <div class="panel"><h2>➕ Schedule Meeting</h2><div class="grid2"><input id="meetingName" placeholder="Meeting name"><input id="meetingDate" type="date"><input id="meetingTime" type="time"><input id="meetingLocation" placeholder="Location"><textarea id="meetingAgenda" placeholder="Agenda" style="min-height:110px"></textarea><textarea id="meetingResolution" placeholder="Decision / resolution (optional)" style="min-height:110px"></textarea></div><button class="primary" style="margin-top:10px" onclick="addMeeting()">Add Meeting</button></div>
       <div class="panel"><h2>🗓️ Meetings</h2><div id="meetingList"></div></div>
     </section>
 
-    <section id="officers" class="page">
-      <div class="panel"><h2>👥 Council Members</h2><div class="notice">Student positions can be assigned after the election. Adult administrators are shown with their admin role.</div><div class="officers" id="officerList"></div></div>
-    </section>
-
     <section id="deadlines" class="page">
-      <div class="panel"><h2>➕ Add Deadline</h2><div class="row"><input id="deadlineName" placeholder="Deadline"><input id="deadlineDate" type="date"></div><input id="deadlineDescription" placeholder="Description (optional)" style="margin-top:8px"><button class="primary" style="margin-top:10px" onclick="addDeadline()">Add Deadline</button></div>
+      <div class="panel"><h2>➕ Add Deadline</h2><div class="grid2"><input id="deadlineName" placeholder="Deadline"><input id="deadlineDate" type="date"><textarea id="deadlineDescription" placeholder="Description" style="min-height:90px"></textarea><div></div></div><button class="primary" style="margin-top:10px" onclick="addDeadline()">Add Deadline</button></div>
       <div class="panel"><h2>⏰ Deadlines</h2><div id="deadlineList"></div></div>
     </section>
 
     <section id="notesPage" class="page">
-      <div class="panel"><h2>📝 Shared Council Notes</h2><div class="notice">These notes are shared with authenticated Student Council members.</div><input id="noteTitle" placeholder="Note title"><textarea id="noteContent" placeholder="Write a shared note..." style="margin-top:8px"></textarea><button class="primary" style="margin-top:10px" onclick="addNote()">Save Shared Note</button></div>
+      <div class="panel"><h2>📝 Shared Council Notes</h2><div class="notice">Shared with authenticated council members. Your name is recorded when you create or edit a note.</div><input id="noteTitle" placeholder="Note title"><textarea id="noteContent" placeholder="Write a shared note..." style="margin-top:8px"></textarea><button class="primary" style="margin-top:10px" onclick="addNote()">Save Shared Note</button></div>
       <div class="panel"><h2>📚 Saved Notes</h2><div id="notesList"></div></div>
+    </section>
+
+    <section id="documentsPage" class="page">
+      <div class="panel"><h2>📚 Council Documents</h2><div class="notice">Keep the council constitution, plans, policies, meeting guides, and other shared reference material in one place.</div><div class="grid2"><input id="docTitle" placeholder="Document title"><input id="docCategory" placeholder="Category (e.g. Constitution)"><input id="docUrl" placeholder="Optional link to a shared file"><textarea id="docContent" placeholder="Document content or summary" style="min-height:140px"></textarea></div><button class="primary" style="margin-top:10px" onclick="addDocument()">Add Document</button></div>
+      <div class="panel"><h2>🗂️ Document Library</h2><div id="documentList"></div></div>
+    </section>
+
+    <section id="officers" class="page">
+      <div class="panel"><h2>👥 Council Members</h2><div class="notice">Positions can be assigned after elections. Administrators can update each member's position, grade, and access level.</div><div class="officers" id="officerList"></div></div>
+    </section>
+
+    <section id="activityPage" class="page">
+      <div class="panel"><h2>📋 Council Activity</h2><div class="notice">Everyone can view the activity feed. It is read-only and cannot be edited or deleted.</div><div id="activityFeed"></div></div>
     </section>
 
     <section id="adminPage" class="page">
       <div class="panel"><h2>🛠️ Administrator Dashboard</h2><div class="notice">Administrator tools are visible only to administrator accounts.</div></div>
-      <div class="admin-grid"><div class="panel"><h2>🟢 Active Members</h2><div id="adminPresence"></div></div><div class="panel"><h2>👤 Council Accounts</h2><div id="adminUsers"></div></div></div>
-      <div class="panel">
-        <h2>➕ Add Council Member</h2>
-        <div class="notice">Administrators can create a login for an elected council member. The new member will appear in the Council Members directory automatically.</div>
-        <div class="grid2">
-          <input id="newMemberName" placeholder="Full name">
-          <input id="newMemberEmail" type="email" placeholder="School email">
-          <input id="newMemberPassword" type="password" placeholder="Temporary password (8+ characters)">
-          <select id="newMemberGrade">
-            <option value="">Grade (optional)</option>
-            <option value="6">Grade 6</option>
-            <option value="7">Grade 7</option>
-            <option value="8">Grade 8</option>
-          </select>
-          <select id="newMemberPosition">
-            <option value="">Position</option>
-            <option>President</option>
-            <option>Vice President</option>
-            <option>Secretary</option>
-            <option>Treasurer</option>
-            <option>Grade 6 Representative</option>
-            <option>Grade 7 Representative</option>
-            <option>Grade 8 Representative</option>
-          </select>
-        </div>
-        <button class="primary" style="margin-top:10px" onclick="createCouncilMember()">Create Council Member Account</button>
-        <div id="memberCreateMessage" class="notice hidden" style="margin-top:10px"></div>
-      </div>
-      <div class="panel"><h2>📋 Recent Activity</h2><div id="activityList"></div></div>
+      <div class="admin-grid"><div class="panel"><h2>🟢 Member Status</h2><div id="adminPresence"></div></div><div class="panel"><h2>📊 Council Overview</h2><div id="adminOverview"></div></div></div>
+      <div class="panel"><h2>➕ Add Council Member</h2><div class="notice">Administrators can create a login for an elected council member. Their profile is added automatically.</div><div class="grid2"><input id="newMemberName" placeholder="Full name"><input id="newMemberEmail" type="email" placeholder="School email"><input id="newMemberPassword" type="password" placeholder="Temporary password (8+ characters)"><select id="newMemberGrade"><option value="">Grade (optional)</option><option value="6">Grade 6</option><option value="7">Grade 7</option><option value="8">Grade 8</option></select><select id="newMemberPosition"><option value="">Position</option><option>President</option><option>Vice President</option><option>Secretary</option><option>Treasurer</option><option>Grade 6 Representative</option><option>Grade 7 Representative</option><option>Grade 8 Representative</option></select><select id="newMemberAccess"><option value="representative">Access: Representative</option><option value="officer">Access: Officer</option><option value="viewer">Access: Viewer</option></select></div><button class="primary" style="margin-top:10px" onclick="createCouncilMember()">Create Council Member Account</button><div id="memberCreateMessage" class="notice hidden" style="margin-top:10px"></div></div>
+      <div class="panel"><h2>🧑‍💼 Manage Member Roles</h2><div id="manageMembers"></div></div>
+      <div class="panel"><h2>📆 School-Year Continuity</h2><div class="notice">Starting a new school year does not delete history. It switches the active workspace to the new year while older years remain archived in the database.</div><div class="row"><input id="nextSchoolYear" placeholder="Example: 2027-2028"><button class="secondary" onclick="startNewSchoolYear()">Start New School Year</button></div><div id="schoolYearHistory" style="margin-top:14px"></div></div>
+      <div class="panel"><h2>📋 Recent Activity</h2><div id="adminActivity"></div></div>
     </section>
   </main>
 </div>
+
+<div id="toast" class="toast"></div>
+<div id="tutorialOverlay" class="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle"><div class="tutorial-card"><div class="tutorial-top"><div class="tutorial-step" id="tutorialStep">Step 1</div><button class="muted-btn" onclick="closeTutorial()">Skip</button></div><div class="tutorial-icon" id="tutorialIcon">🏠</div><h2 id="tutorialTitle">Welcome to Student Council</h2><p id="tutorialText"></p><div class="tutorial-dots" id="tutorialDots"></div><div class="tutorial-actions"><button class="secondary" id="tutorialBack" onclick="prevTutorial()">← Back</button><div class="right"><button class="primary" id="tutorialNext" onclick="nextTutorial()">Next →</button></div></div></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL='https://atkujoqhuhxcfwebijbe.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_xvBJJZHfheW05NoFNc8c4Q_No5S1sKd';
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-let currentUser=null,profile=null,profiles=[],viewDate=new Date(),heartbeatTimer=null;
+let currentUser=null,profile=null,profiles=[],viewDate=new Date(),heartbeatTimer=null,activeSchoolYear='2026-2027';
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmtDate=d=>d?new Date(d+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'';
-const fmtTime=t=>t?String(t).slice(0,5):'';
-const isAdmin=()=>['admin','president','advisor'].includes(profile?.role);
+const fmtTime=t=>t?new Date('1970-01-01T'+t).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}):'';
 const nameOf=p=>p?.full_name||'Student Council Member';
+const isAdmin=()=>['admin','president','advisor'].includes(profile?.role);
+const isViewer=()=>profile?.access_level==='viewer';
+const canCreate=()=>!isViewer();
+function showToast(message){const t=document.getElementById('toast');t.textContent=message;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
 function showError(m){const e=document.getElementById('loginError');e.textContent=m;e.style.display='block'}
 function clearError(){document.getElementById('loginError').style.display='none'}
 async function login(){clearError();const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPass').value;if(!email||!password)return showError('Enter your school email and password.');const {error}=await db.auth.signInWithPassword({email,password});if(error)return showError(error.message);await startApp()}
 async function logout(){if(currentUser)await db.from('presence').delete().eq('user_id',currentUser.id);if(heartbeatTimer)clearInterval(heartbeatTimer);await db.auth.signOut();location.reload()}
-async function startApp(){const {data:{user}}=await db.auth.getUser();if(!user)return;currentUser=user;const {data:p,error}=await db.from('profiles').select('*').eq('id',user.id).single();if(error||!p)return showError('Your Student Council profile could not be loaded.');profile=p;document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('currentUserName').textContent=nameOf(p);document.getElementById('currentUserRole').innerHTML=isAdmin()?' <span class="badge adminbadge">ADMIN</span>':'';document.getElementById('adminNav').classList.toggle('hidden',!isAdmin());await loadAll();await updatePresence();heartbeatTimer=setInterval(updatePresence,20000);setTimeout(()=>{if(!localStorage.getItem('sc_tutorial_seen_'+currentUser.id))openTutorial()},700)}
+async function loadSettings(){const {data,error}=await db.from('council_settings').select('*').eq('id',1).single();if(!error&&data?.active_school_year)activeSchoolYear=data.active_school_year}
+async function startApp(){const {data:{user}}=await db.auth.getUser();if(!user)return;currentUser=user;const {data:p,error}=await db.from('profiles').select('*').eq('id',user.id).single();if(error||!p)return showError('Your Student Council profile could not be loaded.');profile=p;await loadSettings();document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('currentUserName').textContent=nameOf(p);document.getElementById('currentUserRole').innerHTML=isAdmin()?' <span class="badge adminbadge">ADMIN</span>':` <span class="pill">${esc(p.access_level||'representative')}</span>`;document.getElementById('adminNav').classList.toggle('hidden',!isAdmin());if(isViewer())showToast('Viewer access: you can read council content and participate in comments.');await loadAll();await updatePresence();heartbeatTimer=setInterval(updatePresence,20000);setTimeout(()=>{if(!localStorage.getItem('sc_tutorial_seen_'+currentUser.id))openTutorial()},700)}
 async function loadProfiles(){const {data}=await db.from('profiles').select('*').order('full_name');profiles=data||[];const s=document.getElementById('taskAssignee');if(s)s.innerHTML='<option value="">Unassigned</option>'+profiles.map(p=>`<option value="${p.id}">${esc(nameOf(p))}</option>`).join('')}
-async function loadAll(){await loadProfiles();await renderAll();await renderNotes();await renderPresence();if(isAdmin())await renderAdmin()}
+async function loadAll(){await loadProfiles();await renderAll();await renderNotes();await renderDocuments();await renderPresence();await renderActivity();if(isAdmin())await renderAdmin()}
 async function updatePresence(){if(!currentUser)return;await db.from('presence').upsert({user_id:currentUser.id,last_seen:new Date().toISOString()});await renderPresence();if(isAdmin()&&document.getElementById('adminPage').classList.contains('active'))await renderAdmin()}
 async function activity(action,details=''){if(currentUser)await db.from('activity').insert({user_id:currentUser.id,action,details})}
 
 const tutorialSteps=[
-  {icon:'🏠',title:'Welcome to Student Council',text:'This is your shared Student Council workspace. Information you add here can be available to the rest of the council.'},
-  {icon:'📊',title:'Dashboard',text:'The Dashboard gives you a quick view of upcoming events, open tasks, high-priority work, council members, and currently active members.'},
-  {icon:'📅',title:'Calendar',text:'Use Calendar for shared events. Add the event name, date, and time so the council can keep important activities in one place.'},
-  {icon:'✅',title:'Tasks',text:'Use Tasks to organize council work. Tasks can have priorities, due dates, and an assigned council member. Mark work complete when it is finished.'},
-  {icon:'🗓️',title:'Meetings & Deadlines',text:'Meetings can include a date, time, location, and agenda. Deadlines keep important dates visible to the whole council.'},
-  {icon:'📝',title:'Shared Notes',text:'Use Shared Notes for information the council needs to keep together. Notes show who created them and when.'},
-  {icon:'👥',title:'Council Members & Help',text:'Council Members shows the people in the system. Your Tutorial button lets you replay this walkthrough anytime. Admin-only tools appear only for administrators.'}
+{icon:'📊',title:'Dashboard',text:'Your Dashboard is the command center for upcoming work, high-priority tasks, active members, and recent council activity.'},
+{icon:'📅',title:'Calendar',text:'Use Calendar for shared events. Every authenticated member sees the same schedule and the creator is recorded automatically.'},
+{icon:'✅',title:'Tasks',text:'Create tasks, assign them to council members, set priority and due dates, complete work, and discuss the task in comments.'},
+{icon:'🗓️',title:'Meetings',text:'Schedule meetings, build agendas, record decisions, track attendance, add action items, and discuss the meeting in comments.'},
+{icon:'📚',title:'Documents',text:'Store shared council documents and reference material in one place.'},
+{icon:'👥',title:'Council Members',text:'See current members, positions, grades, and active status. Administrators manage member access and elections-related positions.'},
+{icon:'📋',title:'Activity',text:'Everyone can see a read-only record of council activity, showing who did what and when.'},
+{icon:'🛠️',title:'Administrators',text:'Admins can create accounts, manage member roles, monitor activity, and move the council into a new school year without deleting history.'}
 ];
 let tutorialIndex=0;
-function renderTutorial(){
-  const s=tutorialSteps[tutorialIndex];
-  document.getElementById('tutorialStep').textContent=`Step ${tutorialIndex+1} of ${tutorialSteps.length}`;
-  document.getElementById('tutorialIcon').textContent=s.icon;
-  document.getElementById('tutorialTitle').textContent=s.title;
-  document.getElementById('tutorialText').textContent=s.text;
-  document.getElementById('tutorialBack').style.visibility=tutorialIndex===0?'hidden':'visible';
-  document.getElementById('tutorialNext').textContent=tutorialIndex===tutorialSteps.length-1?'Finish ✓':'Next →';
-  document.getElementById('tutorialDots').innerHTML=tutorialSteps.map((_,i)=>`<span class="tutorial-dot ${i===tutorialIndex?'active':''}"></span>`).join('');
-}
-function openTutorial(){
-  tutorialIndex=0;
-  renderTutorial();
-  document.getElementById('tutorialOverlay').style.display='flex';
-}
-function closeTutorial(){
-  document.getElementById('tutorialOverlay').style.display='none';
-  if(currentUser)localStorage.setItem('sc_tutorial_seen_'+currentUser.id,'1');
-}
-function nextTutorial(){
-  if(tutorialIndex<tutorialSteps.length-1){tutorialIndex++;renderTutorial();}
-  else closeTutorial();
-}
-function prevTutorial(){if(tutorialIndex>0){tutorialIndex--;renderTutorial();}}
+function renderTutorial(){const s=tutorialSteps[tutorialIndex];document.getElementById('tutorialStep').textContent=`Step ${tutorialIndex+1} of ${tutorialSteps.length}`;document.getElementById('tutorialIcon').textContent=s.icon;document.getElementById('tutorialTitle').textContent=s.title;document.getElementById('tutorialText').textContent=s.text;document.getElementById('tutorialBack').style.visibility=tutorialIndex===0?'hidden':'visible';document.getElementById('tutorialNext').textContent=tutorialIndex===tutorialSteps.length-1?'Finish ✓':'Next →';document.getElementById('tutorialDots').innerHTML=tutorialSteps.map((_,i)=>`<span class="tutorial-dot ${i===tutorialIndex?'active':''}"></span>`).join('')}
+function openTutorial(){tutorialIndex=0;renderTutorial();document.getElementById('tutorialOverlay').style.display='flex'}
+function closeTutorial(){document.getElementById('tutorialOverlay').style.display='none';if(currentUser)localStorage.setItem('sc_tutorial_seen_'+currentUser.id,'1')}
+function nextTutorial(){if(tutorialIndex<tutorialSteps.length-1){tutorialIndex++;renderTutorial()}else closeTutorial()}
+function prevTutorial(){if(tutorialIndex>0){tutorialIndex--;renderTutorial()}}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const n={dashboard:'Student Council Dashboard',calendar:'Council Calendar',tasksPage:'Tasks',meetings:'Meetings',deadlines:'Deadlines',notesPage:'Shared Notes',documentsPage:'Council Documents',activityPage:'Council Activity',officers:'Council Members',adminPage:'Administrator Dashboard'};document.getElementById('pageTitle').textContent=n[id]||'Dashboard';if(id==='calendar')renderCalendarPage();if(id==='documentsPage')renderDocuments();if(id==='activityPage')renderActivity();if(id==='adminPage'&&isAdmin())renderAdmin()}
 
-function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const n={dashboard:'Student Council Dashboard',calendar:'Council Calendar',tasksPage:'Tasks',meetings:'Meetings',officers:'Council Members',deadlines:'Deadlines',notesPage:'Shared Notes',adminPage:'Administrator Dashboard'};document.getElementById('pageTitle').textContent=n[id]||'Dashboard';if(id==='calendar')renderCalendarPage();if(id==='adminPage'&&isAdmin())renderAdmin()}
-async function addEvent(){const title=document.getElementById('eventName').value.trim(),date=document.getElementById('eventDate').value;if(!title||!date)return alert('Enter an event name and date.');const {error}=await db.from('events').insert({title,event_date:date,start_time:document.getElementById('eventTime').value||null,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created an event',title);['eventName','eventDate','eventTime'].forEach(id=>document.getElementById(id).value='');await renderAll()}
-async function addTask(){const title=document.getElementById('taskText').value.trim();if(!title)return;const {error}=await db.from('tasks').insert({title,description:'',assigned_to:document.getElementById('taskAssignee').value||null,due_date:document.getElementById('taskDue').value||null,completed:false,priority:document.getElementById('taskPriority').value,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a task',title);['taskText','taskDue'].forEach(id=>document.getElementById(id).value='');document.getElementById('taskAssignee').value='';await renderAll()}
+async function addEvent(){if(!canCreate())return alert('Your access level is read-only.');const title=document.getElementById('eventName').value.trim(),date=document.getElementById('eventDate').value;if(!title||!date)return alert('Enter an event name and date.');const {error}=await db.from('events').insert({title,description:document.getElementById('eventDescription').value.trim(),event_date:date,start_time:document.getElementById('eventTime').value||null,end_time:null,location:document.getElementById('eventLocation').value.trim(),created_by:currentUser.id,school_year:activeSchoolYear});if(error)return alert(error.message);await activity('Created an event',title);['eventName','eventDate','eventTime','eventLocation','eventDescription'].forEach(id=>document.getElementById(id).value='');await renderAll();showToast('Event added.')}
+async function addTask(){if(!canCreate())return alert('Your access level is read-only.');const title=document.getElementById('taskText').value.trim();if(!title)return alert('Enter a task title.');const {error}=await db.from('tasks').insert({title,description:document.getElementById('taskDescription').value.trim(),assigned_to:document.getElementById('taskAssignee').value||null,due_date:document.getElementById('taskDue').value||null,completed:false,priority:document.getElementById('taskPriority').value,created_by:currentUser.id,school_year:activeSchoolYear});if(error)return alert(error.message);await activity('Created a task',title);['taskText','taskDue','taskDescription'].forEach(id=>document.getElementById(id).value='');document.getElementById('taskAssignee').value='';await renderAll();showToast('Task added.')}
 async function toggleTask(id,done){const {error}=await db.from('tasks').update({completed:!done}).eq('id',id);if(error)return alert(error.message);await activity(done?'Reopened a task':'Completed a task');await renderAll()}
-async function deleteRow(table,id){const {error}=await db.from(table).delete().eq('id',id);if(error)return alert(error.message);await activity('Deleted an item',table);await renderAll();await renderNotes()}
-async function addMeeting(){const title=document.getElementById('meetingName').value.trim(),date=document.getElementById('meetingDate').value;if(!title||!date)return alert('Enter a meeting name and date.');const {error}=await db.from('meetings').insert({title,meeting_date:date,start_time:document.getElementById('meetingTime').value||null,location:document.getElementById('meetingLocation').value.trim(),agenda:document.getElementById('meetingAgenda').value.trim(),created_by:currentUser.id});if(error)return alert(error.message);await activity('Scheduled a meeting',title);['meetingName','meetingDate','meetingTime','meetingLocation','meetingAgenda'].forEach(id=>document.getElementById(id).value='');await renderAll()}
-async function addDeadline(){const title=document.getElementById('deadlineName').value.trim(),date=document.getElementById('deadlineDate').value;if(!title||!date)return alert('Enter a deadline and date.');const {error}=await db.from('deadlines').insert({title,description:document.getElementById('deadlineDescription').value.trim(),deadline_date:date,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a deadline',title);['deadlineName','deadlineDate','deadlineDescription'].forEach(id=>document.getElementById(id).value='');await renderAll()}
-async function addNote(){const title=document.getElementById('noteTitle').value.trim(),content=document.getElementById('noteContent').value.trim();if(!title||!content)return alert('Enter a note title and note content.');const {error}=await db.from('notes').insert({title,content,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a shared note',title);document.getElementById('noteTitle').value='';document.getElementById('noteContent').value='';await renderNotes()}
-async function renderAll(){let [{data:E},{data:T},{data:M},{data:D}]=await Promise.all([db.from('events').select('*, profiles(full_name)').order('event_date'),db.from('tasks').select('*, profiles(full_name)').order('created_at',{ascending:false}),db.from('meetings').select('*, profiles(full_name)').order('meeting_date'),db.from('deadlines').select('*, profiles(full_name)').order('deadline_date')]);E=E||[];T=T||[];M=M||[];D=D||[];document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});document.getElementById('eventCount').textContent=E.length+M.length;document.getElementById('taskCount').textContent=T.filter(x=>!x.completed).length;document.getElementById('highCount').textContent=T.filter(x=>!x.completed&&x.priority==='high').length;document.getElementById('officerCount').textContent=profiles.length;renderTasks(T);renderMeetings(M);renderOfficers();renderDeadlines(D);renderCalendar(E,M,D);const up=[...E.map(x=>({...x,type:'Event',date:x.event_date,time:x.start_time,title:x.title})),...M.map(x=>({...x,type:'Meeting',date:x.meeting_date,time:x.start_time,title:x.title}))].sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).slice(0,5);document.getElementById('dashEvents').innerHTML=up.length?up.map(x=>`<div class="item"><div class="item-title">${esc(x.title)} <span class="badge low">${x.type.toUpperCase()}</span></div><div class="meta">📅 ${fmtDate(x.date)} ${x.time?' • ⏰ '+esc(fmtTime(x.time)):''}<br>Created by ${esc(x.profiles?.full_name||'Member')}</div></div>`).join(''):'<div class="empty">No upcoming schedule items.</div>';const tasks=T.filter(x=>!x.completed).slice(0,5);document.getElementById('dashTasks').innerHTML=tasks.length?tasks.map(x=>`<div class="item"><div class="item-title">${esc(x.title)}</div><div class="meta">${x.due_date?'Due '+fmtDate(x.due_date):'No due date'} • Created by ${esc(x.profiles?.full_name||'Member')}</div></div>`).join(''):'<div class="empty">No open tasks.</div>'}
-function renderTasks(T){document.getElementById('taskList').innerHTML=T.length?T.map(t=>{const a=profiles.find(p=>p.id===t.assigned_to),priority=t.priority||'medium';return `<div class="item"><div class="item-title" style="${t.completed?'text-decoration:line-through;color:#888':''}">${esc(t.title)} <span class="badge ${priority}">${priority.toUpperCase()}</span></div><div class="meta">${t.due_date?'Due '+fmtDate(t.due_date):'No due date'}${a?' • Assigned to '+esc(nameOf(a)):''} • Created by ${esc(t.profiles?.full_name||'Member')}</div><div class="actions"><button class="success" onclick="toggleTask(${t.id},${t.completed})">${t.completed?'Reopen':'Complete'}</button>${isAdmin()?`<button class="danger" onclick="deleteRow('tasks',${t.id})">Delete</button>`:''}</div></div>`}).join(''):'<div class="empty">No tasks yet.</div>'}
-function renderMeetings(M){document.getElementById('meetingList').innerHTML=M.length?M.map(m=>`<div class="item"><div class="item-title">${esc(m.title)}</div><div class="meta">📅 ${fmtDate(m.meeting_date)} ${m.start_time?' • ⏰ '+esc(fmtTime(m.start_time)):''}${m.location?' • 📍 '+esc(m.location):''} • Created by ${esc(m.profiles?.full_name||'Member')}</div>${m.agenda?`<div class="meta" style="margin-top:8px">Agenda: ${esc(m.agenda)}</div>`:''}${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('meetings',${m.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No meetings scheduled.</div>'}
-function renderDeadlines(D){document.getElementById('deadlineList').innerHTML=D.length?D.map(d=>`<div class="item"><div class="item-title">${esc(d.title)}</div><div class="meta">⏰ ${fmtDate(d.deadline_date)} • Created by ${esc(d.profiles?.full_name||'Member')}</div>${d.description?`<div class="meta">${esc(d.description)}</div>`:''}${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('deadlines',${d.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No deadlines yet.</div>'}
-function renderOfficers(){document.getElementById('officerList').innerHTML=profiles.length?profiles.map(p=>{const initials=nameOf(p).trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();return `<div class="officer"><div class="avatar">${esc(initials)}</div><strong>${esc(nameOf(p))}</strong><div class="meta">${esc(p.role==='admin'?'Administrator':p.position||'Student Council Member')}</div>${p.grade_level?`<div class="meta">Grade ${esc(p.grade_level)}</div>`:''}</div>`}).join(''):'<div class="empty">No council members yet.</div>'}
-function renderCalendar(E,M,D){const y=viewDate.getFullYear(),m=viewDate.getMonth();document.getElementById('monthTitle').textContent=new Date(y,m,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),today=new Date();let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<first;i++)h+='<div class="day"></div>';for(let d=1;d<=days;d++){const iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,items=[...E.filter(x=>x.event_date===iso),...M.filter(x=>x.meeting_date===iso),...D.filter(x=>x.deadline_date===iso)],todayFlag=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;h+=`<div class="day ${todayFlag?'today':''}"><div class="daynum">${d}</div>${items.map(x=>`<div class="cal-event">${esc(x.title)}</div>`).join('')}</div>`}document.getElementById('calendarGrid').innerHTML=h}
-async function renderCalendarPage(){const [{data:E},{data:M},{data:D}]=await Promise.all([db.from('events').select('*, profiles(full_name)'),db.from('meetings').select('*, profiles(full_name)'),db.from('deadlines').select('*, profiles(full_name)')]);renderCalendar(E||[],M||[],D||[])}
-function changeMonth(n){viewDate.setMonth(viewDate.getMonth()+n);renderCalendarPage()}
-async function renderNotes(){const {data}=await db.from('notes').select('*, profiles(full_name)').order('created_at',{ascending:false});const N=data||[];document.getElementById('notesList').innerHTML=N.length?N.map(n=>`<div class="item"><div class="item-title">${esc(n.title)}</div><div style="white-space:pre-wrap;margin-top:8px">${esc(n.content)}</div><div class="meta">Created by ${esc(n.profiles?.full_name||'Member')} • ${new Date(n.created_at).toLocaleString()}</div>${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('notes',${n.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No shared notes yet.</div>'}
-async function renderPresence(){const {data:P}=await db.from('presence').select('user_id,last_seen');const now=Date.now(),people=(P||[]).filter(x=>now-new Date(x.last_seen).getTime()<60000).map(x=>profiles.find(p=>p.id===x.user_id)).filter(Boolean);document.getElementById('activeMembers').innerHTML=people.length?people.map(p=>`<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta online">● Active now${isAdmin()&&p.role==='admin'?' • Administrator':''}</div></div>`).join(''):'<div class="empty">No members are currently active.</div>'}
-async function createCouncilMember(){
-  if(!isAdmin()) return alert('Administrator access required.');
-  const full_name=document.getElementById('newMemberName').value.trim();
-  const email=document.getElementById('newMemberEmail').value.trim();
-  const password=document.getElementById('newMemberPassword').value;
-  const grade=document.getElementById('newMemberGrade').value;
-  const position=document.getElementById('newMemberPosition').value;
-  const msg=document.getElementById('memberCreateMessage');
-  msg.classList.remove('hidden');
-  msg.textContent='Creating account...';
-  if(!full_name||!email||!password||!position){
-    msg.textContent='Please enter the name, email, password, and position.';
-    return;
-  }
-  if(password.length<8){
-    msg.textContent='Password must be at least 8 characters.';
-    return;
-  }
-  const {data,error}=await db.functions.invoke('create-council-member',{
-    body:{full_name,email,password,position,grade_level:grade?Number(grade):null}
-  });
-  if(error){
-    msg.textContent='Could not create the account: '+(error.message||'Unknown error');
-    return;
-  }
-  if(data?.error){
-    msg.textContent='Could not create the account: '+data.error;
-    return;
-  }
-  msg.textContent=data?.message||'Council member account created successfully.';
-  ['newMemberName','newMemberEmail','newMemberPassword'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('newMemberGrade').value='';
-  document.getElementById('newMemberPosition').value='';
-  await loadProfiles();
-  await renderAll();
-  await renderAdmin();
+async function deleteRow(table,id){if(!isAdmin())return alert('Administrator access required.');const {error}=await db.from(table).delete().eq('id',id);if(error)return alert(error.message);await activity('Deleted an item',table);await renderAll();await renderNotes();await renderDocuments()}
+async function addMeeting(){if(!canCreate())return alert('Your access level is read-only.');const title=document.getElementById('meetingName').value.trim(),date=document.getElementById('meetingDate').value;if(!title||!date)return alert('Enter a meeting name and date.');const {error}=await db.from('meetings').insert({title,meeting_date:date,start_time:document.getElementById('meetingTime').value||null,location:document.getElementById('meetingLocation').value.trim(),agenda:document.getElementById('meetingAgenda').value.trim(),resolution:document.getElementById('meetingResolution').value.trim(),created_by:currentUser.id,school_year:activeSchoolYear});if(error)return alert(error.message);await activity('Scheduled a meeting',title);['meetingName','meetingDate','meetingTime','meetingLocation','meetingAgenda','meetingResolution'].forEach(id=>document.getElementById(id).value='');await renderAll();showToast('Meeting scheduled.')}
+async function addDeadline(){if(!canCreate())return alert('Your access level is read-only.');const title=document.getElementById('deadlineName').value.trim(),date=document.getElementById('deadlineDate').value;if(!title||!date)return alert('Enter a deadline and date.');const {error}=await db.from('deadlines').insert({title,description:document.getElementById('deadlineDescription').value.trim(),deadline_date:date,created_by:currentUser.id,school_year:activeSchoolYear});if(error)return alert(error.message);await activity('Created a deadline',title);['deadlineName','deadlineDate','deadlineDescription'].forEach(id=>document.getElementById(id).value='');await renderAll();showToast('Deadline added.')}
+async function addNote(){if(!canCreate())return alert('Your access level is read-only.');const title=document.getElementById('noteTitle').value.trim(),content=document.getElementById('noteContent').value.trim();if(!title||!content)return alert('Enter a note title and note content.');const {error}=await db.from('notes').insert({title,content,created_by:currentUser.id,school_year:activeSchoolYear});if(error)return alert(error.message);await activity('Created a shared note',title);document.getElementById('noteTitle').value='';document.getElementById('noteContent').value='';await renderNotes();showToast('Note saved.')}
+async function addDocument(){if(!['admin','officer'].includes(profile?.access_level))return alert('Officer or administrator access is required to add documents.');const title=document.getElementById('docTitle').value.trim(),category=document.getElementById('docCategory').value.trim(),content=document.getElementById('docContent').value.trim(),url=document.getElementById('docUrl').value.trim();if(!title||!content)return alert('Enter a document title and content.');const {error}=await db.from('documents').insert({title,category,content,document_url:url||null,created_by:currentUser.id,school_year:activeSchoolYear});if(error)return alert(error.message);await activity('Added a council document',title);['docTitle','docCategory','docContent','docUrl'].forEach(id=>document.getElementById(id).value='');await renderDocuments();showToast('Document added.')}
+
+async function renderAll(){
+ const [er,tr,mr,dr]=await Promise.all([
+  db.from('events').select('*').eq('school_year',activeSchoolYear).order('event_date'),
+  db.from('tasks').select('*').eq('school_year',activeSchoolYear).order('created_at',{ascending:false}),
+  db.from('meetings').select('*').eq('school_year',activeSchoolYear).order('meeting_date'),
+  db.from('deadlines').select('*').eq('school_year',activeSchoolYear).order('deadline_date')
+ ]);
+ const E=er.data||[],T=tr.data||[],M=mr.data||[],D=dr.data||[];
+ document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' • School Year '+activeSchoolYear;
+ document.getElementById('eventCount').textContent=E.length+M.length;
+ document.getElementById('taskCount').textContent=T.filter(x=>!x.completed).length;
+ document.getElementById('highCount').textContent=T.filter(x=>!x.completed&&x.priority==='high').length;
+ document.getElementById('officerCount').textContent=profiles.length;
+ renderTasks(T);renderMeetings(M);renderOfficers();renderDeadlines(D);renderCalendar(E,M,D);
+ const up=[...E.map(x=>({...x,type:'Event',date:x.event_date,time:x.start_time})),...M.map(x=>({...x,type:'Meeting',date:x.meeting_date,time:x.start_time}))].sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).slice(0,6);
+ document.getElementById('dashEvents').innerHTML=up.length?up.map(x=>`<div class="item"><div class="item-title">${esc(x.title)} <span class="badge low">${x.type.toUpperCase()}</span></div><div class="meta">📅 ${fmtDate(x.date)} ${x.time?' • ⏰ '+esc(fmtTime(x.time)):''}${x.location?' • 📍 '+esc(x.location):''}<br>Created by ${esc(nameOf(profiles.find(p=>p.id===x.created_by)))}</div></div>`).join(''):'<div class="empty">No upcoming schedule items.</div>';
+ const tasks=T.filter(x=>!x.completed).slice(0,6);
+ document.getElementById('dashTasks').innerHTML=tasks.length?tasks.map(x=>{const a=profiles.find(p=>p.id===x.assigned_to);return `<div class="item"><div class="item-title">${esc(x.title)} <span class="badge ${x.priority||'medium'}">${esc((x.priority||'medium').toUpperCase())}</span></div><div class="meta">${x.due_date?'Due '+fmtDate(x.due_date):'No due date'}${a?' • Assigned to '+esc(nameOf(a)):''} • Created by ${esc(nameOf(profiles.find(p=>p.id===x.created_by)))}</div></div>`}).join(''):'<div class="empty">No open tasks.</div>';
+ await renderDashboardActivity();
 }
-async function renderAdmin(){if(!isAdmin())return;const {data:P}=await db.from('presence').select('user_id,last_seen'),now=Date.now();document.getElementById('adminPresence').innerHTML=profiles.map(p=>{const r=(P||[]).find(x=>x.user_id===p.id),on=r&&now-new Date(r.last_seen).getTime()<60000;return `<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta ${on?'online':'offline'}">${on?'● Active now':r?'Last seen '+new Date(r.last_seen).toLocaleString():'Not active yet'}</div></div>`}).join('');document.getElementById('adminUsers').innerHTML=profiles.map(p=>`<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta">${esc(p.role)}</div></div>`).join('');const {data:A}=await db.from('activity').select('*, profiles(full_name)').order('created_at',{ascending:false}).limit(30);document.getElementById('activityList').innerHTML=(A||[]).length?(A||[]).map(a=>`<div class="item"><div class="item-title">${esc(a.action)}</div><div class="meta">${esc(a.profiles?.full_name||'Member')} • ${new Date(a.created_at).toLocaleString()}${a.details?' • '+esc(a.details):''}</div></div>`).join(''):'<div class="empty">No activity recorded yet.</div>'}
+function renderTasks(T){const el=document.getElementById('taskList');if(!T.length){el.innerHTML='<div class="empty">No tasks yet.</div>';return}el.innerHTML=T.map(t=>{const a=profiles.find(p=>p.id===t.assigned_to);return `<div class="item"><div class="item-title" style="${t.completed?'text-decoration:line-through;color:#888':''}">${esc(t.title)} <span class="badge ${t.priority||'medium'}">${esc((t.priority||'medium').toUpperCase())}</span></div><div class="meta">${t.due_date?'Due '+fmtDate(t.due_date):'No due date'}${a?' • Assigned to '+esc(nameOf(a)):''} • Created by ${esc(nameOf(profiles.find(p=>p.id===t.created_by)))}</div>${t.description?`<div style="margin-top:8px;white-space:pre-wrap">${esc(t.description)}</div>`:''}<div class="actions" style="margin-top:10px"><button class="success" onclick="toggleTask(${t.id},${t.completed})">${t.completed?'Reopen':'Complete'}</button>${isAdmin()?`<button class="danger" onclick="deleteRow('tasks',${t.id})">Delete</button>`:''}</div><div id="taskComments-${t.id}" class="comments-box"></div></div>`}).join('');T.forEach(t=>renderComments('task',t.id,document.getElementById('taskComments-'+t.id)))}
+function renderMeetings(M){const el=document.getElementById('meetingList');if(!M.length){el.innerHTML='<div class="empty">No meetings scheduled.</div>';return}el.innerHTML=M.map(m=>`<div class="item"><div class="item-title">${esc(m.title)}</div><div class="meta">📅 ${fmtDate(m.meeting_date)} ${m.start_time?' • ⏰ '+esc(fmtTime(m.start_time)):''}${m.location?' • 📍 '+esc(m.location):''} • Created by ${esc(nameOf(profiles.find(p=>p.id===m.created_by)))}</div>${m.agenda?`<div style="margin-top:8px"><strong>Agenda</strong><div style="white-space:pre-wrap;margin-top:5px">${esc(m.agenda)}</div></div>`:''}${m.resolution?`<div style="margin-top:8px"><strong>Decision / Resolution</strong><div style="white-space:pre-wrap;margin-top:5px">${esc(m.resolution)}</div></div>`:''}<div class="subtle" style="margin-top:12px"><strong>Attendance</strong><div id="attendance-${m.id}" style="margin-top:8px"></div></div><div class="subtle" style="margin-top:12px"><strong>Action Items</strong><div id="actions-${m.id}" style="margin-top:8px"></div></div><div id="meetingComments-${m.id}" class="comments-box"></div><div class="actions" style="margin-top:10px">${isAdmin()?`<button class="danger" onclick="deleteRow('meetings',${m.id})">Delete</button>`:''}</div></div>`).join('');M.forEach(m=>{renderComments('meeting',m.id,document.getElementById('meetingComments-'+m.id));renderAttendance(m.id);renderMeetingActions(m.id)})}
+function renderDeadlines(D){document.getElementById('deadlineList').innerHTML=D.length?D.map(d=>`<div class="item"><div class="item-title">${esc(d.title)}</div><div class="meta">⏰ ${fmtDate(d.deadline_date)} • Created by ${esc(nameOf(profiles.find(p=>p.id===d.created_by)))}</div>${d.description?`<div class="meta" style="white-space:pre-wrap">${esc(d.description)}</div>`:''}${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('deadlines',${d.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No deadlines yet.</div>'}
+function renderOfficers(){document.getElementById('officerList').innerHTML=profiles.length?profiles.map(p=>{const initials=nameOf(p).trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase(),isOn=getOnline(p.id);return `<div class="officer"><div class="avatar">${esc(initials)}</div><strong>${esc(nameOf(p))}</strong><div class="meta">${esc(p.position|| (p.role==='admin'?'Administrator':'Student Council Member'))}</div>${p.grade_level?`<div class="meta">Grade ${esc(p.grade_level)}</div>`:''}<div class="meta">${isOn?'<span class="status-dot"></span>Active now':'○ Offline'} • ${esc(p.access_level||'representative')}</div></div>`}).join(''):'<div class="empty">No council members yet.</div>'}
+function renderCalendar(E,M,D){const y=viewDate.getFullYear(),m=viewDate.getMonth();document.getElementById('monthTitle').textContent=new Date(y,m,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),today=new Date();let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<first;i++)h+='<div class="day"></div>';for(let d=1;d<=days;d++){const iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,items=[...E.filter(x=>x.event_date===iso),...M.filter(x=>x.meeting_date===iso),...D.filter(x=>x.deadline_date===iso)],todayFlag=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;h+=`<div class="day ${todayFlag?'today':''}"><div class="daynum">${d}</div>${items.map(x=>`<div class="cal-event">${esc(x.title)}<small>${esc(x.location||'')}</small></div>`).join('')}</div>`}document.getElementById('calendarGrid').innerHTML=h}
+async function renderCalendarPage(){const [er,mr,dr]=await Promise.all([db.from('events').select('*').eq('school_year',activeSchoolYear),db.from('meetings').select('*').eq('school_year',activeSchoolYear),db.from('deadlines').select('*').eq('school_year',activeSchoolYear)]);renderCalendar(er.data||[],mr.data||[],dr.data||[])}
+function changeMonth(n){viewDate.setMonth(viewDate.getMonth()+n);renderCalendarPage()}
+async function renderNotes(){const {data,error}=await db.from('notes').select('*').eq('school_year',activeSchoolYear).order('created_at',{ascending:false});const N=data||[];const el=document.getElementById('notesList');if(error){el.innerHTML='<div class="empty">Notes could not be loaded.</div>';return}el.innerHTML=N.length?N.map(n=>`<div class="item"><div class="item-title">${esc(n.title)}</div><div style="white-space:pre-wrap;margin-top:8px">${esc(n.content)}</div><div class="meta">Created by ${esc(nameOf(profiles.find(p=>p.id===n.created_by)))} • ${new Date(n.created_at).toLocaleString()}</div>${isAdmin()?`<button class="danger" style="margin-top:8px" onclick="deleteRow('notes',${n.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No shared notes yet.</div>'}
+async function renderDocuments(){const {data,error}=await db.from('documents').select('*').eq('school_year',activeSchoolYear).order('created_at',{ascending:false});const D=data||[];const el=document.getElementById('documentList');if(!el)return;if(error){el.innerHTML='<div class="empty">Documents could not be loaded. Run the database upgrade first.</div>';return}el.innerHTML=D.length?D.map(d=>`<div class="item document-card"><div class="grow"><div class="item-title">${esc(d.title)} ${d.category?`<span class="pill">${esc(d.category)}</span>`:''}</div><div style="white-space:pre-wrap;margin-top:8px">${esc(d.content)}</div><div class="meta">Added by ${esc(nameOf(profiles.find(p=>p.id===d.created_by)))} • ${new Date(d.created_at).toLocaleString()}${d.document_url?' • ':''}${d.document_url?`<a href="${esc(d.document_url)}" target="_blank" rel="noopener">Open linked file</a>`:''}</div></div>${isAdmin()?`<button class="danger" onclick="deleteRow('documents',${d.id})">Delete</button>`:''}</div>`).join(''):'<div class="empty">No council documents yet.</div>'}
+
+async function renderPresence(){const {data:P}=await db.from('presence').select('user_id,last_seen');const now=Date.now();window.presenceRows=P||[];const people=(P||[]).filter(x=>now-new Date(x.last_seen).getTime()<60000).map(x=>profiles.find(p=>p.id===x.user_id)).filter(Boolean);document.getElementById('activeCount').textContent=people.length;document.getElementById('activeMembers').innerHTML=people.length?people.map(p=>`<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta online">● Active now</div></div>`).join(''):'<div class="empty">No members are currently active.</div>'}
+function getOnline(id){return (window.presenceRows||[]).some(x=>x.user_id===id&&Date.now()-new Date(x.last_seen).getTime()<60000)}
+
+async function getComments(type,targetId){const {data,error}=await db.from('comments').select('*').eq('target_type',type).eq('target_id',targetId).order('created_at');return {data:data||[],error}}
+async function renderComments(type,targetId,container){if(!container)return;const {data,error}=await getComments(type,targetId);if(error){container.innerHTML='<div class="empty">Comments unavailable.</div>';return}const label=type==='task'?'Task':'Meeting';container.innerHTML=`<strong>💬 ${label} discussion</strong>${data.length?data.map(c=>`<div class="comment"><div class="comment-author">${esc(nameOf(profiles.find(p=>p.id===c.user_id)))}</div><div>${esc(c.content)}</div><div class="comment-time">${new Date(c.created_at).toLocaleString()}${c.user_id===currentUser.id?` • <button class="muted-btn" style="padding:2px 6px;border-radius:5px" onclick="deleteOwnComment(${c.id})">Delete</button>`:''}${isAdmin()&&c.user_id!==currentUser.id?` • <button class="muted-btn" style="padding:2px 6px;border-radius:5px" onclick="deleteComment(${c.id})">Moderate</button>`:''}</div></div>`).join(''):'<div class="meta">No comments yet.</div>'}<div class="comment-form"><textarea id="comment-${type}-${targetId}" placeholder="Add a comment..."></textarea><button onclick="addComment('${type}',${targetId})">Post</button></div>`}
+async function addComment(type,targetId){const el=document.getElementById(`comment-${type}-${targetId}`),content=el?.value.trim();if(!content)return;const {error}=await db.from('comments').insert({target_type:type,target_id:targetId,content,user_id:currentUser.id});if(error)return alert(error.message);await activity('Added a comment',`${type} ${targetId}`);el.value='';const box=document.getElementById(`${type==='task'?'taskComments':'meetingComments'}-${targetId}`);await renderComments(type,targetId,box)}
+async function deleteOwnComment(id){const {error}=await db.from('comments').delete().eq('id',id).eq('user_id',currentUser.id);if(error)return alert(error.message);await activity('Deleted a comment');await renderAll()}
+async function deleteComment(id){if(!isAdmin())return;const {error}=await db.from('comments').delete().eq('id',id);if(error)return alert(error.message);await activity('Moderated a comment');await renderAll()}
+
+async function renderAttendance(meetingId){const box=document.getElementById('attendance-'+meetingId);if(!box)return;const {data}=await db.from('meeting_attendance').select('*').eq('meeting_id',meetingId);const rows=data||[];const me=rows.find(x=>x.user_id===currentUser.id);const counts={present:rows.filter(x=>x.status==='present').length,absent:rows.filter(x=>x.status==='absent').length,excused:rows.filter(x=>x.status==='excused').length};box.innerHTML=`<div class="meta">Present ${counts.present} • Absent ${counts.absent} • Excused ${counts.excused}</div><div class="actions" style="margin-top:8px"><button class="success" onclick="setAttendance(${meetingId},'present')">Present</button><button class="muted-btn" onclick="setAttendance(${meetingId},'absent')">Absent</button><button class="secondary" onclick="setAttendance(${meetingId},'excused')">Excused</button></div><div class="meta" style="margin-top:6px">Your status: ${me?.status||'Not marked'}</div>`}
+async function setAttendance(meetingId,status){const {error}=await db.from('meeting_attendance').upsert({meeting_id:meetingId,user_id:currentUser.id,status},{onConflict:'meeting_id,user_id'});if(error)return alert(error.message);await activity('Updated meeting attendance',`${meetingId}: ${status}`);await renderAll()}
+async function renderMeetingActions(meetingId){const box=document.getElementById('actions-'+meetingId);if(!box)return;const {data,error}=await db.from('meeting_action_items').select('*').eq('meeting_id',meetingId).order('created_at');if(error){box.innerHTML='<div class="meta">Action items unavailable.</div>';return}const items=data||[];box.innerHTML=`${items.length?items.map(i=>`<div class="item"><div class="item-title" style="${i.completed?'text-decoration:line-through;color:#888':''}">${esc(i.title)}</div><div class="meta">${i.assigned_to?'Assigned to '+esc(nameOf(profiles.find(p=>p.id===i.assigned_to))):'Unassigned'}${i.due_date?' • Due '+fmtDate(i.due_date):''}</div><div class="actions" style="margin-top:6px"><button class="success" onclick="toggleMeetingAction(${i.id},${i.completed})">${i.completed?'Reopen':'Complete'}</button>${isAdmin()?`<button class="danger" onclick="deleteMeetingAction(${i.id})">Delete</button>`:''}</div></div>`).join(''):'<div class="meta">No action items yet.</div>'}<div class="grid2" style="margin-top:8px"><input id="action-title-${meetingId}" placeholder="Action item"><select id="action-assignee-${meetingId}"><option value="">Unassigned</option>${profiles.map(p=>`<option value="${p.id}">${esc(nameOf(p))}</option>`).join('')}</select><input id="action-due-${meetingId}" type="date"></div><button class="secondary" style="margin-top:8px" onclick="addMeetingAction(${meetingId})">Add Action Item</button>`}
+async function addMeetingAction(meetingId){if(!canCreate())return alert('Your access level is read-only.');const title=document.getElementById('action-title-'+meetingId).value.trim();if(!title)return;const {error}=await db.from('meeting_action_items').insert({meeting_id:meetingId,title,assigned_to:document.getElementById('action-assignee-'+meetingId).value||null,due_date:document.getElementById('action-due-'+meetingId).value||null,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a meeting action item',title);await renderAll()}
+async function toggleMeetingAction(id,done){const {error}=await db.from('meeting_action_items').update({completed:!done}).eq('id',id);if(error)return alert(error.message);await activity(done?'Reopened a meeting action item':'Completed a meeting action item');await renderAll()}
+async function deleteMeetingAction(id){if(!isAdmin())return;const {error}=await db.from('meeting_action_items').delete().eq('id',id);if(error)return alert(error.message);await activity('Deleted a meeting action item');await renderAll()}
+
+async function createCouncilMember(){if(!isAdmin())return alert('Administrator access required.');const full_name=document.getElementById('newMemberName').value.trim(),email=document.getElementById('newMemberEmail').value.trim(),password=document.getElementById('newMemberPassword').value,grade=document.getElementById('newMemberGrade').value,position=document.getElementById('newMemberPosition').value,access=document.getElementById('newMemberAccess').value,msg=document.getElementById('memberCreateMessage');msg.classList.remove('hidden');msg.textContent='Creating account...';if(!full_name||!email||!password||!position){msg.textContent='Please enter the name, email, password, and position.';return}if(password.length<8){msg.textContent='Password must be at least 8 characters.';return}const {data,error}=await db.functions.invoke('create-council-member',{body:{full_name,email,password,position,grade_level:grade?Number(grade):null}});if(error){msg.textContent='Could not create the account: '+(error.message||'Unknown error');return}if(data?.error){msg.textContent='Could not create the account: '+data.error;return}msg.textContent=data?.message||'Council member account created successfully.';['newMemberName','newMemberEmail','newMemberPassword'].forEach(id=>document.getElementById(id).value='');document.getElementById('newMemberGrade').value='';document.getElementById('newMemberPosition').value='';document.getElementById('newMemberAccess').value='representative';await loadProfiles();const newProfile=profiles.find(p=>p.id===data?.user_id);if(newProfile&&access!=='representative'){await db.from('profiles').update({access_level:access}).eq('id',newProfile.id)}await loadProfiles();await renderAll();await renderAdmin()}
+async function updateMember(id){if(!isAdmin())return;const position=document.getElementById('pos-'+id).value.trim(),grade=document.getElementById('grade-'+id).value,access=document.getElementById('access-'+id).value;const {error}=await db.from('profiles').update({position:position||null,grade_level:grade?Number(grade):null,access_level:access}).eq('id',id);if(error)return alert(error.message);await activity('Updated council member profile',nameOf(profiles.find(p=>p.id===id)));await loadProfiles();await renderAll();await renderAdmin();showToast('Member profile updated.')}
+async function renderAdmin(){if(!isAdmin())return;const {data:P}=await db.from('presence').select('user_id,last_seen');window.presenceRows=P||[];const now=Date.now();document.getElementById('adminPresence').innerHTML=profiles.length?profiles.map(p=>{const r=(P||[]).find(x=>x.user_id===p.id),on=r&&now-new Date(r.last_seen).getTime()<60000;return `<div class="item"><strong>${esc(nameOf(p))}</strong><div class="meta ${on?'online':'offline'}">${on?'● Active now':r?'Last seen '+new Date(r.last_seen).toLocaleString():'Not active yet'}</div><div class="meta">${esc(p.position||'No position')} • ${esc(p.access_level||'representative')}</div></div>`}).join(''):'<div class="empty">No council members yet.</div>';
+ document.getElementById('adminOverview').innerHTML=`<div class="kpi"><span>Active school year</span><strong>${esc(activeSchoolYear)}</strong></div><div class="kpi" style="margin-top:10px"><span>Administrators</span><strong>${profiles.filter(p=>isAdminRole(p.role)).length}</strong></div><div class="kpi" style="margin-top:10px"><span>Officers</span><strong>${profiles.filter(p=>p.access_level==='officer').length}</strong></div><div class="kpi" style="margin-top:10px"><span>Representatives</span><strong>${profiles.filter(p=>p.access_level==='representative').length}</strong></div>`;
+ document.getElementById('manageMembers').innerHTML=profiles.map(p=>`<div class="item"><div class="item-title">${esc(nameOf(p))}</div><div class="grid3" style="margin-top:8px"><input id="pos-${p.id}" value="${esc(p.position||'')}" placeholder="Position"><select id="grade-${p.id}"><option value="">Grade</option><option value="6" ${p.grade_level==6?'selected':''}>6</option><option value="7" ${p.grade_level==7?'selected':''}>7</option><option value="8" ${p.grade_level==8?'selected':''}>8</option></select><select id="access-${p.id}"><option value="admin" ${p.access_level==='admin'?'selected':''}>Admin</option><option value="officer" ${p.access_level==='officer'?'selected':''}>Officer</option><option value="representative" ${p.access_level==='representative'?'selected':''}>Representative</option><option value="viewer" ${p.access_level==='viewer'?'selected':''}>Viewer</option></select></div><div class="actions" style="margin-top:8px"><button class="secondary" onclick="updateMember('${p.id}')">Save Member</button></div></div>`).join('');
+ await renderActivity();document.getElementById('adminActivity').innerHTML=document.getElementById('activityFeed').innerHTML;await renderSchoolYears()}
+function isAdminRole(role){return ['admin','president','advisor'].includes(role)}
+async function startNewSchoolYear(){if(!isAdmin())return;const y=document.getElementById('nextSchoolYear').value.trim();if(!/^\d{4}-\d{4}$/.test(y))return alert('Use format like 2027-2028.');if(!confirm(`Switch the shared workspace to school year ${y}? Older data will remain stored as history.`))return;const {error}=await db.from('council_settings').upsert({id:1,active_school_year:y,updated_by:currentUser.id},{onConflict:'id'});if(error)return alert(error.message);await db.from('school_years').upsert({label:y,is_active:true},{onConflict:'label'});await db.from('school_years').update({is_active:false}).neq('label',y);activeSchoolYear=y;await activity('Started a new school year',y);await renderAll();await renderNotes();await renderDocuments();await renderAdmin();showToast('New school year is now active.')}
+async function renderSchoolYears(){const el=document.getElementById('schoolYearHistory');if(!el)return;const {data}=await db.from('school_years').select('*').order('label',{ascending:false});el.innerHTML=(data||[]).length?`<table class="table"><thead><tr><th>School Year</th><th>Status</th><th>Created</th></tr></thead><tbody>${data.map(y=>`<tr><td>${esc(y.label)}</td><td>${y.is_active?'Active':'Archived'}</td><td>${new Date(y.created_at).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">No school-year history yet.</div>'}
+async function renderActivity(){const {data:A,error}=await db.from('activity').select('*').order('created_at',{ascending:false}).limit(75);const el=document.getElementById('activityFeed');if(!el)return;if(error){el.innerHTML='<div class="empty">Activity could not be loaded.</div>';return}el.innerHTML=(A||[]).length?(A||[]).map(a=>`<div class="item"><div class="item-title">${esc(nameOf(profiles.find(p=>p.id===a.user_id)))} — ${esc(a.action)}</div><div class="meta">${new Date(a.created_at).toLocaleString()}${a.details?' • '+esc(a.details):''}</div></div>`).join(''):'<div class="empty">No activity recorded yet.</div>'}
+async function renderDashboardActivity(){const {data:A}=await db.from('activity').select('*').order('created_at',{ascending:false}).limit(6);document.getElementById('dashActivity').innerHTML=(A||[]).length?(A||[]).map(a=>`<div class="item"><div class="item-title">${esc(nameOf(profiles.find(p=>p.id===a.user_id)))} — ${esc(a.action)}</div><div class="meta">${new Date(a.created_at).toLocaleString()}${a.details?' • '+esc(a.details):''}</div></div>`).join(''):'<div class="empty">No recent activity.</div>'}
 setInterval(()=>{if(currentUser)renderPresence()},30000);
 db.auth.getSession().then(({data:{session}})=>{if(session)startApp()});
 </script>
-
-
-<div id="tutorialOverlay" class="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
-  <div class="tutorial-card">
-    <div class="tutorial-top">
-      <div class="tutorial-step" id="tutorialStep">Step 1 of 7</div>
-      <button class="secondary" onclick="closeTutorial()">Skip Tutorial</button>
-    </div>
-    <div class="tutorial-icon" id="tutorialIcon">🏠</div>
-    <h2 id="tutorialTitle">Welcome to Student Council</h2>
-    <p id="tutorialText"></p>
-    <div class="tutorial-dots" id="tutorialDots"></div>
-    <div class="tutorial-actions">
-      <button class="secondary" id="tutorialBack" onclick="prevTutorial()">← Back</button>
-      <div class="right">
-        <button class="primary" id="tutorialNext" onclick="nextTutorial()">Next →</button>
-      </div>
-    </div>
-  </div>
-</div>
 </body>
 </html>
