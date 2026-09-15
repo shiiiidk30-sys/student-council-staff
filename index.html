@@ -35,6 +35,19 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary2);box-shadow:
 textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px solid #fed7aa;padding:12px;border-radius:10px;color:#9a3412;margin-bottom:16px}
 @media(max-width:950px){.sidebar{position:static;width:100%;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.logout{position:static;margin-top:10px}.main{margin-left:0;padding:18px}.cards{grid-template-columns:repeat(2,1fr)}.grid2,.admin-grid{grid-template-columns:1fr}.officers{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.calendar{font-size:11px}.dow,.day{padding:5px}.day{min-height:75px}.officers{grid-template-columns:1fr}.sidebar{padding:12px}.brand{padding-bottom:10px}}
+
+.tutorial-overlay{position:fixed;inset:0;background:rgba(15,23,42,.62);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.tutorial-card{width:min(620px,100%);background:#fff;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.25);padding:28px}
+.tutorial-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.tutorial-step{font-size:13px;color:var(--muted);font-weight:700}
+.tutorial-icon{font-size:42px;margin-bottom:8px}
+.tutorial-card h2{margin:6px 0 10px;font-size:25px}
+.tutorial-card p{color:#4b5563;line-height:1.6;margin:0 0 18px}
+.tutorial-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px}
+.tutorial-actions .right{display:flex;gap:8px}
+.tutorial-dots{display:flex;gap:6px;margin-top:18px}
+.tutorial-dot{width:8px;height:8px;border-radius:50%;background:#d1d5db}
+.tutorial-dot.active{background:var(--primary);width:22px;border-radius:8px}
 </style>
 </head>
 <body>
@@ -61,7 +74,7 @@ textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px 
       <button onclick="showPage('meetings',this)">🗓️ Meetings</button>
       <button onclick="showPage('officers',this)">👥 Council Members</button><button id="adminNav" class="hidden" onclick="showPage('adminPage',this)">🛠️ Admin</button>
       <button onclick="showPage('deadlines',this)">⏰ Deadlines</button>
-      <button onclick="showPage('notesPage',this)">📝 Notes</button>
+      <button onclick="showPage('notesPage',this)">📝 Notes</button><button onclick="openTutorial()">📘 Tutorial</button>
     </div>
     <button class="logout" onclick="logout()">Log Out</button>
   </aside>
@@ -164,11 +177,47 @@ function showError(m){const e=document.getElementById('loginError');e.textConten
 function clearError(){document.getElementById('loginError').style.display='none'}
 async function login(){clearError();const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPass').value;if(!email||!password)return showError('Enter your school email and password.');const {error}=await db.auth.signInWithPassword({email,password});if(error)return showError(error.message);await startApp()}
 async function logout(){if(currentUser)await db.from('presence').delete().eq('user_id',currentUser.id);if(heartbeatTimer)clearInterval(heartbeatTimer);await db.auth.signOut();location.reload()}
-async function startApp(){const {data:{user}}=await db.auth.getUser();if(!user)return;currentUser=user;const {data:p,error}=await db.from('profiles').select('*').eq('id',user.id).single();if(error||!p)return showError('Your Student Council profile could not be loaded.');profile=p;document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('currentUserName').textContent=nameOf(p);document.getElementById('currentUserRole').innerHTML=isAdmin()?' <span class="badge adminbadge">ADMIN</span>':'';document.getElementById('adminNav').classList.toggle('hidden',!isAdmin());await loadAll();await updatePresence();heartbeatTimer=setInterval(updatePresence,20000)}
+async function startApp(){const {data:{user}}=await db.auth.getUser();if(!user)return;currentUser=user;const {data:p,error}=await db.from('profiles').select('*').eq('id',user.id).single();if(error||!p)return showError('Your Student Council profile could not be loaded.');profile=p;document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('currentUserName').textContent=nameOf(p);document.getElementById('currentUserRole').innerHTML=isAdmin()?' <span class="badge adminbadge">ADMIN</span>':'';document.getElementById('adminNav').classList.toggle('hidden',!isAdmin());await loadAll();await updatePresence();heartbeatTimer=setInterval(updatePresence,20000);setTimeout(()=>{if(!localStorage.getItem('sc_tutorial_seen_'+currentUser.id))openTutorial()},700)}
 async function loadProfiles(){const {data}=await db.from('profiles').select('*').order('full_name');profiles=data||[];const s=document.getElementById('taskAssignee');if(s)s.innerHTML='<option value="">Unassigned</option>'+profiles.map(p=>`<option value="${p.id}">${esc(nameOf(p))}</option>`).join('')}
 async function loadAll(){await loadProfiles();await renderAll();await renderNotes();await renderPresence();if(isAdmin())await renderAdmin()}
 async function updatePresence(){if(!currentUser)return;await db.from('presence').upsert({user_id:currentUser.id,last_seen:new Date().toISOString()});await renderPresence();if(isAdmin()&&document.getElementById('adminPage').classList.contains('active'))await renderAdmin()}
 async function activity(action,details=''){if(currentUser)await db.from('activity').insert({user_id:currentUser.id,action,details})}
+
+const tutorialSteps=[
+  {icon:'🏠',title:'Welcome to Student Council',text:'This is your shared Student Council workspace. Information you add here can be available to the rest of the council.'},
+  {icon:'📊',title:'Dashboard',text:'The Dashboard gives you a quick view of upcoming events, open tasks, high-priority work, council members, and currently active members.'},
+  {icon:'📅',title:'Calendar',text:'Use Calendar for shared events. Add the event name, date, and time so the council can keep important activities in one place.'},
+  {icon:'✅',title:'Tasks',text:'Use Tasks to organize council work. Tasks can have priorities, due dates, and an assigned council member. Mark work complete when it is finished.'},
+  {icon:'🗓️',title:'Meetings & Deadlines',text:'Meetings can include a date, time, location, and agenda. Deadlines keep important dates visible to the whole council.'},
+  {icon:'📝',title:'Shared Notes',text:'Use Shared Notes for information the council needs to keep together. Notes show who created them and when.'},
+  {icon:'👥',title:'Council Members & Help',text:'Council Members shows the people in the system. Your Tutorial button lets you replay this walkthrough anytime. Admin-only tools appear only for administrators.'}
+];
+let tutorialIndex=0;
+function renderTutorial(){
+  const s=tutorialSteps[tutorialIndex];
+  document.getElementById('tutorialStep').textContent=`Step ${tutorialIndex+1} of ${tutorialSteps.length}`;
+  document.getElementById('tutorialIcon').textContent=s.icon;
+  document.getElementById('tutorialTitle').textContent=s.title;
+  document.getElementById('tutorialText').textContent=s.text;
+  document.getElementById('tutorialBack').style.visibility=tutorialIndex===0?'hidden':'visible';
+  document.getElementById('tutorialNext').textContent=tutorialIndex===tutorialSteps.length-1?'Finish ✓':'Next →';
+  document.getElementById('tutorialDots').innerHTML=tutorialSteps.map((_,i)=>`<span class="tutorial-dot ${i===tutorialIndex?'active':''}"></span>`).join('');
+}
+function openTutorial(){
+  tutorialIndex=0;
+  renderTutorial();
+  document.getElementById('tutorialOverlay').style.display='flex';
+}
+function closeTutorial(){
+  document.getElementById('tutorialOverlay').style.display='none';
+  if(currentUser)localStorage.setItem('sc_tutorial_seen_'+currentUser.id,'1');
+}
+function nextTutorial(){
+  if(tutorialIndex<tutorialSteps.length-1){tutorialIndex++;renderTutorial();}
+  else closeTutorial();
+}
+function prevTutorial(){if(tutorialIndex>0){tutorialIndex--;renderTutorial();}}
+
 function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');const n={dashboard:'Student Council Dashboard',calendar:'Council Calendar',tasksPage:'Tasks',meetings:'Meetings',officers:'Council Members',deadlines:'Deadlines',notesPage:'Shared Notes',adminPage:'Administrator Dashboard'};document.getElementById('pageTitle').textContent=n[id]||'Dashboard';if(id==='calendar')renderCalendarPage();if(id==='adminPage'&&isAdmin())renderAdmin()}
 async function addEvent(){const title=document.getElementById('eventName').value.trim(),date=document.getElementById('eventDate').value;if(!title||!date)return alert('Enter an event name and date.');const {error}=await db.from('events').insert({title,event_date:date,start_time:document.getElementById('eventTime').value||null,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created an event',title);['eventName','eventDate','eventTime'].forEach(id=>document.getElementById(id).value='');await renderAll()}
 async function addTask(){const title=document.getElementById('taskText').value.trim();if(!title)return;const {error}=await db.from('tasks').insert({title,description:'',assigned_to:document.getElementById('taskAssignee').value||null,due_date:document.getElementById('taskDue').value||null,completed:false,priority:document.getElementById('taskPriority').value,created_by:currentUser.id});if(error)return alert(error.message);await activity('Created a task',title);['taskText','taskDue'].forEach(id=>document.getElementById(id).value='');document.getElementById('taskAssignee').value='';await renderAll()}
@@ -229,5 +278,24 @@ setInterval(()=>{if(currentUser)renderPresence()},30000);
 db.auth.getSession().then(({data:{session}})=>{if(session)startApp()});
 </script>
 
+
+<div id="tutorialOverlay" class="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+  <div class="tutorial-card">
+    <div class="tutorial-top">
+      <div class="tutorial-step" id="tutorialStep">Step 1 of 7</div>
+      <button class="secondary" onclick="closeTutorial()">Skip Tutorial</button>
+    </div>
+    <div class="tutorial-icon" id="tutorialIcon">🏠</div>
+    <h2 id="tutorialTitle">Welcome to Student Council</h2>
+    <p id="tutorialText"></p>
+    <div class="tutorial-dots" id="tutorialDots"></div>
+    <div class="tutorial-actions">
+      <button class="secondary" id="tutorialBack" onclick="prevTutorial()">← Back</button>
+      <div class="right">
+        <button class="primary" id="tutorialNext" onclick="nextTutorial()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
