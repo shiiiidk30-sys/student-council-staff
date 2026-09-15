@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Council President Dashboard</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--text:#172033;--muted:#6b7280;--primary:#263b73;--primary2:#405ca8;--line:#e5e7eb;--danger:#c83b3b;--shadow:0 10px 30px rgba(25,38,70,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#17244a,#405ca8)}
+.login-card{width:min(430px,100%);background:#fff;border-radius:24px;padding:34px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.logo{font-size:44px;text-align:center}.login h1{text-align:center;margin:8px 0 6px}.login p{text-align:center;color:var(--muted);margin-bottom:25px}
+.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(64,92,168,.12)}
+.primary{background:var(--primary);color:#fff;padding:12px 16px;border-radius:10px;font-weight:700;width:100%}
+.small{font-size:12px;color:var(--muted);margin-top:12px;text-align:center}
+.app{display:none;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#18254b;color:#fff;padding:24px 16px}
+.brand{font-weight:800;font-size:19px;padding:8px 10px 24px}.brand span{font-size:27px}
+.nav button{width:100%;text-align:left;background:transparent;color:#dfe5f5;padding:12px;border-radius:10px;margin:3px 0}
+.nav button.active,.nav button:hover{background:rgba(255,255,255,.12);color:#fff}
+.logout{position:absolute;bottom:20px;left:16px;right:16px;background:#fff;color:#18254b;padding:11px;border-radius:10px;font-weight:700}
+.main{margin-left:245px;padding:28px;max-width:1500px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.top h1{margin:0;font-size:30px}.date{color:var(--muted)}
+.page{display:none}.page.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.card{padding:20px}.card .label{color:var(--muted);font-size:13px;font-weight:700}.metric{font-size:32px;font-weight:800;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}.panel{padding:20px;margin-bottom:20px}.panel h2{margin:0 0 16px;font-size:18px}
+.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{padding:9px 12px;border-radius:9px}
+.secondary{background:#eef2ff;color:var(--primary)}.danger{background:#fee2e2;color:#991b1b}.success{background:#dcfce7;color:#166534}
+.item{border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0;background:#fbfcff}.item-title{font-weight:800}.meta{color:var(--muted);font-size:13px;margin-top:5px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800;margin-left:5px}.high{background:#fee2e2;color:#991b1b}.medium{background:#fef3c7;color:#92400e}.low{background:#dcfce7;color:#166534}
+.empty{color:var(--muted);text-align:center;padding:20px}
+.officers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.officer{padding:16px;border:1px solid var(--line);border-radius:12px}.avatar{width:42px;height:42px;border-radius:50%;background:#e9edff;display:grid;place-items:center;font-weight:800;color:var(--primary);margin-bottom:9px}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.dow,.day{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px}.dow{font-weight:800;text-align:center;background:#f8fafc}.day{min-height:100px;background:#fff}.day.today{background:#eef2ff}.daynum{font-weight:800}.cal-event{font-size:11px;background:#e9edff;color:#263b73;border-radius:5px;padding:4px;margin-top:5px;overflow:hidden}
+textarea{min-height:220px;resize:vertical}.notice{background:#fff7ed;border:1px solid #fed7aa;padding:12px;border-radius:10px;color:#9a3412;margin-bottom:16px}
+@media(max-width:950px){.sidebar{position:static;width:100%;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.logout{position:static;margin-top:10px}.main{margin-left:0;padding:18px}.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.officers{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.calendar{font-size:11px}.dow,.day{padding:5px}.day{min-height:75px}.officers{grid-template-columns:1fr}.sidebar{padding:12px}.brand{padding-bottom:10px}}
+</style>
+</head>
+<body>
+
+<div id="login" class="login">
+  <div class="login-card">
+    <div class="logo">🎓</div>
+    <h1>Student Council</h1>
+    <p>President Dashboard</p>
+    <div class="field"><label>Your name</label><input id="loginName" placeholder="Enter your name"></div>
+    <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Create a local password"></div>
+    <button class="primary" onclick="login()">Enter Dashboard</button>
+    <div class="small">This login is stored only in this browser. It is not a secure online account.</div>
+  </div>
+</div>
+
+<div id="app" class="app">
+  <aside class="sidebar">
+    <div class="brand"><span>🎓</span><br>Student Council</div>
+    <div class="nav">
+      <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+      <button onclick="showPage('calendar',this)">📅 Calendar</button>
+      <button onclick="showPage('tasksPage',this)">✅ Tasks</button>
+      <button onclick="showPage('meetings',this)">🗓️ Meetings</button>
+      <button onclick="showPage('officers',this)">👥 Officers</button>
+      <button onclick="showPage('deadlines',this)">⏰ Deadlines</button>
+      <button onclick="showPage('notesPage',this)">📝 Notes</button>
+    </div>
+    <button class="logout" onclick="logout()">Log Out</button>
+  </aside>
+
+  <main class="main">
+    <div class="top"><div><h1 id="pageTitle">President Dashboard</h1><div class="date" id="today"></div></div></div>
+
+    <section id="dashboard" class="page active">
+      <div class="cards">
+        <div class="card"><div class="label">Upcoming Events</div><div class="metric" id="eventCount">0</div></div>
+        <div class="card"><div class="label">Open Tasks</div><div class="metric" id="taskCount">0</div></div>
+        <div class="card"><div class="label">High Priority</div><div class="metric" id="highCount">0</div></div>
+        <div class="card"><div class="label">Officers</div><div class="metric" id="officerCount">0</div></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><h2>📆 Upcoming Schedule</h2><div id="dashEvents"></div></div>
+        <div class="panel"><h2>🚨 Priority Tasks</h2><div id="dashTasks"></div></div>
+      </div>
+    </section>
+
+    <section id="calendar" class="page">
+      <div class="panel"><h2>➕ Add Calendar Event</h2><div class="row"><input id="eventName" placeholder="Event name"><input id="eventDate" type="date"><input id="eventTime" type="time"></div><button class="primary" style="margin-top:10px" onclick="addEvent()">Add Event</button></div>
+      <div class="panel">
+        <div class="calendar-head"><button class="secondary" onclick="changeMonth(-1)">←</button><h2 id="monthTitle"></h2><button class="secondary" onclick="changeMonth(1)">→</button></div>
+        <div class="calendar" id="calendarGrid"></div>
+      </div>
+    </section>
+
+    <section id="tasksPage" class="page">
+      <div class="panel"><h2>➕ Add Task</h2><div class="row"><input id="taskText" placeholder="Task"><select id="taskPriority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select><input id="taskDue" type="date"></div><button class="primary" style="margin-top:10px" onclick="addTask()">Add Task</button></div>
+      <div class="panel"><h2>✅ Task List</h2><div id="taskList"></div></div>
+    </section>
+
+    <section id="meetings" class="page">
+      <div class="panel"><h2>➕ Schedule Meeting</h2><div class="row"><input id="meetingName" placeholder="Meeting name"><input id="meetingDate" type="date"><input id="meetingTime" type="time"></div><input id="meetingLocation" placeholder="Location" style="margin-top:8px"><button class="primary" style="margin-top:10px" onclick="addMeeting()">Add Meeting</button></div>
+      <div class="panel"><h2>🗓️ Meetings</h2><div id="meetingList"></div></div>
+    </section>
+
+    <section id="officers" class="page">
+      <div class="panel"><h2>➕ Add Officer</h2><div class="row"><input id="officerName" placeholder="Name"><input id="officerRole" placeholder="Position / role"></div><button class="primary" style="margin-top:10px" onclick="addOfficer()">Add Officer</button></div>
+      <div class="panel"><h2>👥 Council Officers</h2><div class="officers" id="officerList"></div></div>
+    </section>
+
+    <section id="deadlines" class="page">
+      <div class="panel"><h2>➕ Add Deadline</h2><div class="row"><input id="deadlineName" placeholder="Deadline"><input id="deadlineDate" type="date"></div><button class="primary" style="margin-top:10px" onclick="addDeadline()">Add Deadline</button></div>
+      <div class="panel"><h2>⏰ Deadlines</h2><div id="deadlineList"></div></div>
+    </section>
+
+    <section id="notesPage" class="page">
+      <div class="panel"><h2>📝 President's Notes</h2><div class="notice">Use this for meeting notes, ideas, announcements, reminders, or plans.</div><textarea id="notes" placeholder="Write your notes here..."></textarea><button class="primary" style="margin-top:10px" onclick="saveNotes()">Save Notes</button></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const KEY='sc_president_dashboard_v2';
+let data=JSON.parse(localStorage.getItem(KEY)||'null')||{events:[],tasks:[],meetings:[],officers:[],deadlines:[],notes:'',user:''};
+let viewDate=new Date();
+
+function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
+function login(){
+  const n=document.getElementById('loginName').value.trim(),p=document.getElementById('loginPass').value;
+  if(!n||!p){alert('Enter your name and a password.');return}
+  data.user=n;save();localStorage.setItem('sc_logged_in','1');document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';renderAll()
+}
+function logout(){localStorage.removeItem('sc_logged_in');location.reload()}
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+  const names={dashboard:'President Dashboard',calendar:'Council Calendar',tasksPage:'Tasks',meetings:'Meetings',officers:'Officers',deadlines:'Deadlines',notesPage:'President Notes'};
+  document.getElementById('pageTitle').textContent=names[id]||'Dashboard';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function addTask(){let t=document.getElementById('taskText').value.trim();if(!t)return;data.tasks.push({id:Date.now(),text:t,priority:document.getElementById('taskPriority').value,due:document.getElementById('taskDue').value,done:false});document.getElementById('taskText').value='';document.getElementById('taskDue').value='';save()}
+function toggleTask(id){let x=data.tasks.find(t=>t.id===id);if(x)x.done=!x.done;save()}
+function del(type,id){data[type]=data[type].filter(x=>x.id!==id);save()}
+function addMeeting(){let n=document.getElementById('meetingName').value.trim(),d=document.getElementById('meetingDate').value;if(!n||!d)return alert('Enter a meeting name and date.');data.meetings.push({id:Date.now(),name:n,date:d,time:document.getElementById('meetingTime').value,location:document.getElementById('meetingLocation').value});save()}
+function addOfficer(){let n=document.getElementById('officerName').value.trim(),r=document.getElementById('officerRole').value.trim();if(!n||!r)return alert('Enter a name and role.');data.officers.push({id:Date.now(),name:n,role:r});document.getElementById('officerName').value='';document.getElementById('officerRole').value='';save()}
+function addDeadline(){let n=document.getElementById('deadlineName').value.trim(),d=document.getElementById('deadlineDate').value;if(!n||!d)return alert('Enter a deadline and date.');data.deadlines.push({id:Date.now(),name:n,date:d});save()}
+function addEvent(){
+  let n=document.getElementById('eventName').value.trim(),d=document.getElementById('eventDate').value;
+  if(!n||!d)return alert('Enter an event name and date.');
+  data.events.push({id:Date.now(),name:n,date:d,time:document.getElementById('eventTime').value});
+  document.getElementById('eventName').value='';document.getElementById('eventDate').value='';document.getElementById('eventTime').value='';
+  save();
+}
+function saveNotes(){data.notes=document.getElementById('notes').value;save();alert('Notes saved!')}
+function fmtDate(d){if(!d)return '';return new Date(d+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}
+function renderTasks(){
+  const html=data.tasks.length?data.tasks.map(t=>`<div class="item"><div class="item-title" style="${t.done?'text-decoration:line-through;color:#888':''}">${esc(t.text)} <span class="badge ${t.priority}">${t.priority.toUpperCase()}</span></div><div class="meta">${t.due?'Due '+fmtDate(t.due):'No due date'}</div><div class="actions"><button class="success" onclick="toggleTask(${t.id})">${t.done?'Reopen':'Complete'}</button><button class="danger" onclick="del('tasks',${t.id})">Delete</button></div></div>`).join(''):'<div class="empty">No tasks yet.</div>';
+  document.getElementById('taskList').innerHTML=html;
+  document.getElementById('dashTasks').innerHTML=(data.tasks.filter(t=>!t.done&&t.priority==='high').slice(0,5).map(t=>`<div class="item"><div class="item-title">${esc(t.text)} <span class="badge high">HIGH</span></div><div class="meta">${t.due?'Due '+fmtDate(t.due):''}</div></div>`).join('')||'<div class="empty">No high-priority tasks.</div>')
+}
+function renderMeetings(){document.getElementById('meetingList').innerHTML=data.meetings.length?data.meetings.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(m=>`<div class="item"><div class="item-title">${esc(m.name)}</div><div class="meta">📅 ${fmtDate(m.date)} ${m.time?' • ⏰ '+esc(m.time):''} ${m.location?' • 📍 '+esc(m.location):''}</div><button class="danger" onclick="del('meetings',${m.id})">Delete</button></div>`).join(''):'<div class="empty">No meetings scheduled.</div>'}
+function renderOfficers(){document.getElementById('officerList').innerHTML=data.officers.length?data.officers.map(o=>`<div class="officer"><div class="avatar">${esc(o.name.charAt(0).toUpperCase())}</div><strong>${esc(o.name)}</strong><div class="meta">${esc(o.role)}</div><button class="danger" onclick="del('officers',${o.id})">Remove</button></div>`).join(''):'<div class="empty">Add your council officers.</div>'}
+function renderDeadlines(){document.getElementById('deadlineList').innerHTML=data.deadlines.length?data.deadlines.sort((a,b)=>a.date.localeCompare(b.date)).map(d=>`<div class="item"><div class="item-title">${esc(d.name)}</div><div class="meta">⏰ ${fmtDate(d.date)}</div><button class="danger" onclick="del('deadlines',${d.id})">Delete</button></div>`).join(''):'<div class="empty">No deadlines yet.</div>'}
+function renderCalendar(){
+  const y=viewDate.getFullYear(),m=viewDate.getMonth();document.getElementById('monthTitle').textContent=new Date(y,m,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});
+  const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),today=new Date();
+  let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="dow">${x}</div>`).join('');
+  for(let i=0;i<first;i++)h+='<div class="day"></div>';
+  for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,items=[...data.meetings.filter(x=>x.date===iso),...data.deadlines.filter(x=>x.date===iso)];let isToday=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;h+=`<div class="day ${isToday?'today':''}"><div class="daynum">${d}</div>${items.map(x=>`<div class="cal-event">${esc(x.name)}</div>`).join('')}</div>`}
+  document.getElementById('calendarGrid').innerHTML=h
+}
+function changeMonth(n){viewDate.setMonth(viewDate.getMonth()+n);renderCalendar()}
+function renderAll(){
+  document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('eventCount').textContent=data.events.length+data.meetings.length;
+  document.getElementById('taskCount').textContent=data.tasks.filter(t=>!t.done).length;
+  document.getElementById('highCount').textContent=data.tasks.filter(t=>!t.done&&t.priority==='high').length;
+  document.getElementById('officerCount').textContent=data.officers.length;
+  renderTasks();renderMeetings();renderOfficers();renderDeadlines();renderCalendar();
+  document.getElementById('notes').value=data.notes||'';
+  const upcoming=[...data.events.map(x=>({...x,type:'Event'})),...data.meetings.map(x=>({...x,type:'Meeting'}))].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).slice(0,5);
+  document.getElementById('dashEvents').innerHTML=upcoming.length?upcoming.map(x=>`<div class="item"><div class="item-title">${esc(x.name)} <span class="badge low">${x.type.toUpperCase()}</span></div><div class="meta">📅 ${fmtDate(x.date)} ${x.time?' • '+esc(x.time):''}</div></div>`).join(''):'<div class="empty">No upcoming meetings.</div>';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('notes').value=data.notes||'';
+  if(localStorage.getItem('sc_logged_in')==='1'&&data.user){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';renderAll()}
+});
+</script>
+</body>
+</html>
