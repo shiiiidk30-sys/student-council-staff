@@ -522,6 +522,112 @@ main > *:nth-child(3){animation-delay:.07s}
 }
 </style>
 
+
+<style id="council-discussion-ui">
+.discussion-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  background:
+    radial-gradient(circle at 92% 18%,rgba(244,163,64,.20),transparent 14rem),
+    linear-gradient(135deg,#16234a,#304783);
+  color:#fff;
+}
+.discussion-hero .meta{color:rgba(255,255,255,.78);max-width:720px}
+.discussion-eyebrow{
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  color:#ffc46b;
+  margin-bottom:7px;
+}
+.discussion-hero h2{margin:0 0 5px}
+.discussion-badge{
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  color:rgba(255,255,255,.9);
+  font-size:.78rem;
+  white-space:nowrap;
+}
+.discussion-composer{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+.discussion-avatar{
+  flex:0 0 44px;
+  width:44px;height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:linear-gradient(135deg,#16234a,#405ca8);
+  color:#fff;
+  font-weight:800;
+}
+.discussion-compose-main{flex:1;min-width:0}
+#generalComment{min-height:105px;resize:vertical}
+.discussion-compose-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:10px;
+}
+.discussion-list-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+}
+.discussion-list-head h2{margin:0 0 4px}
+.discussion-post{
+  padding:16px 0;
+  border-top:1px solid #e8ebf1;
+}
+.discussion-post:first-child{border-top:0;padding-top:2px}
+.discussion-post-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.discussion-post-avatar{
+  width:36px;height:36px;
+  display:grid;place-items:center;
+  border-radius:11px;
+  background:#eef1f7;
+  color:#24366f;
+  font-size:.78rem;
+  font-weight:800;
+}
+.discussion-post-author{font-weight:800}
+.discussion-post-time{font-size:.72rem;color:#8a92a2}
+.discussion-post-body{
+  margin:10px 0 0 46px;
+  white-space:pre-wrap;
+  line-height:1.55;
+  color:#2b3447;
+  overflow-wrap:anywhere;
+}
+.discussion-post-actions{
+  margin:9px 0 0 46px;
+}
+.discussion-empty{
+  padding:28px 8px;
+  text-align:center;
+  color:#7b8496;
+}
+@media(max-width:650px){
+  .discussion-hero{align-items:flex-start;flex-direction:column}
+  .discussion-badge{white-space:normal}
+  .discussion-compose-footer{align-items:flex-start;flex-direction:column}
+  .discussion-post-body,.discussion-post-actions{margin-left:0}
+}
+</style>
+
 </head>
 <body>
 <div id="login" class="login">
@@ -549,6 +655,7 @@ main > *:nth-child(3){animation-delay:.07s}
       <button onclick="showPage('notesPage',this)">📝 Notes</button>
       <button onclick="showPage('documentsPage',this)">📚 Documents</button>
       <button onclick="showPage('activityPage',this)">📋 Activity</button>
+      <button onclick="showPage('discussionPage',this)">💬 Council Discussion</button>
       <button onclick="showPage('officers',this)">👥 Council Members</button>
     </div></div>
     <div class="nav-group" id="adminNav"><div class="nav-group-label">Administration</div><div class="nav">
@@ -645,7 +752,43 @@ main > *:nth-child(3){animation-delay:.07s}
       <div class="panel"><h2>🗂️ Document Library</h2><div id="documentList"></div></div>
     </section>
 
-    <section id="officers" class="page">
+    
+    <section id="discussionPage" class="page">
+      <div class="panel discussion-hero">
+        <div>
+          <div class="discussion-eyebrow">COUNCIL COMMUNITY</div>
+          <h2>💬 Council Discussion</h2>
+          <p class="meta">A shared space for ideas, questions, updates, and planning. Keep the conversation in one place.</p>
+        </div>
+        <div class="discussion-badge">Everyone on the council can participate</div>
+      </div>
+
+      <div class="panel">
+        <div class="discussion-composer">
+          <div class="discussion-avatar" id="discussionAvatar">SC</div>
+          <div class="discussion-compose-main">
+            <textarea id="generalComment" placeholder="Share an idea, ask a question, or post an update..." maxlength="2000"></textarea>
+            <div class="discussion-compose-footer">
+              <span class="meta">Be respectful and keep posts council-related.</span>
+              <button class="primary" onclick="addGeneralComment()">Post to Council</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="discussion-list-head">
+          <div>
+            <h2>Recent Conversation</h2>
+            <div class="meta">Newest council discussion appears here.</div>
+          </div>
+          <button class="secondary" onclick="renderGeneralDiscussion()">↻ Refresh</button>
+        </div>
+        <div id="generalDiscussionList"></div>
+      </div>
+    </section>
+
+<section id="officers" class="page">
       <div class="panel"><div class="hero-row"><div><h2 style="margin-bottom:6px">👥 Meet the Team</h2><div class="meta">Get to know the students and adults who make the council work.</div></div></div><div class="notice" style="margin-top:16px">Profiles can include a photo, position, grade, and short description. Administrators can keep team information current from the Admin dashboard.</div><div class="officers" id="officerList"></div></div>
     </section>
 
@@ -688,7 +831,7 @@ async function logout(){if(currentUser)await db.from('presence').delete().eq('us
 async function loadSettings(){const {data,error}=await db.from('council_settings').select('*').eq('id',1).single();if(!error&&data?.active_school_year)activeSchoolYear=data.active_school_year}
 async function startApp(){const {data:{user}}=await db.auth.getUser();if(!user)return;currentUser=user;const {data:p,error}=await db.from('profiles').select('*').eq('id',user.id).single();if(error||!p)return showError('Your Student Council profile could not be loaded.');profile=p;await loadSettings();document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('currentUserName').textContent=nameOf(p);document.getElementById('currentUserRole').innerHTML=isAdmin()?' <span class="badge adminbadge">ADMIN</span>':` <span class="pill">${esc(p.access_level||'representative')}</span>`;document.getElementById('adminNav').classList.toggle('hidden',!isAdmin());if(isViewer())showToast('Viewer access: you can read council content and participate in comments.');await loadAll();await updatePresence();heartbeatTimer=setInterval(updatePresence,20000);setTimeout(()=>{if(!localStorage.getItem('sc_tutorial_seen_'+currentUser.id))openTutorial()},700)}
 async function loadProfiles(){const {data}=await db.from('profiles').select('*').order('full_name');profiles=data||[];const s=document.getElementById('taskAssignee');if(s)s.innerHTML='<option value="">Unassigned</option>'+profiles.map(p=>`<option value="${p.id}">${esc(nameOf(p))}</option>`).join('')}
-async function loadAll(){await loadProfiles();await renderAll();await renderNotes();await renderDocuments();await renderPresence();await renderActivity();if(isAdmin())await renderAdmin()}
+async function loadAll(){await loadProfiles();await renderAll();await renderNotes();await renderDocuments();await renderPresence();await renderActivity();await renderGeneralDiscussion();if(isAdmin())await renderAdmin()}
 async function updatePresence(){if(!currentUser)return;await db.from('presence').upsert({user_id:currentUser.id,last_seen:new Date().toISOString()});await renderPresence();if(isAdmin()&&document.getElementById('adminPage').classList.contains('active'))await renderAdmin()}
 async function activity(action,details=''){if(currentUser)await db.from('activity').insert({user_id:currentUser.id,action,details})}
 
@@ -757,6 +900,51 @@ async function renderComments(type,targetId,container){if(!container)return;cons
 async function addComment(type,targetId){const el=document.getElementById(`comment-${type}-${targetId}`),content=el?.value.trim();if(!content)return;const {error}=await db.from('comments').insert({target_type:type,target_id:targetId,content,user_id:currentUser.id});if(error)return alert(error.message);await activity('Added a comment',`${type} ${targetId}`);el.value='';const box=document.getElementById(`${type==='task'?'taskComments':'meetingComments'}-${targetId}`);await renderComments(type,targetId,box)}
 async function deleteOwnComment(id){const {error}=await db.from('comments').delete().eq('id',id).eq('user_id',currentUser.id);if(error)return alert(error.message);await activity('Deleted a comment');await renderAll()}
 async function deleteComment(id){if(!isAdmin())return;const {error}=await db.from('comments').delete().eq('id',id);if(error)return alert(error.message);await activity('Moderated a comment');await renderAll()}
+
+
+function initialsFor(p){
+ const n=nameOf(p).trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+ return n||'SC';
+}
+async function renderGeneralDiscussion(){
+ const el=document.getElementById('generalDiscussionList');
+ if(!el)return;
+ const {data,error}=await db.from('comments').select('*').eq('target_type','general').eq('target_id',1).order('created_at',{ascending:false});
+ if(error){el.innerHTML='<div class="empty">Discussion is unavailable right now.</div>';return}
+ const rows=data||[];
+ el.innerHTML=rows.length?rows.map(c=>{
+   const author=profiles.find(p=>p.id===c.user_id);
+   return `<article class="discussion-post">
+     <div class="discussion-post-head">
+       <div class="discussion-post-avatar">${esc(initialsFor(author))}</div>
+       <div><div class="discussion-post-author">${esc(nameOf(author))}</div><div class="discussion-post-time">${new Date(c.created_at).toLocaleString()}</div></div>
+     </div>
+     <div class="discussion-post-body">${esc(c.content)}</div>
+     <div class="discussion-post-actions">${c.user_id===currentUser.id?`<button class="muted-btn" style="padding:5px 8px;border-radius:7px" onclick="deleteGeneralComment(${c.id})">Delete</button>`:''}${isAdmin()&&c.user_id!==currentUser.id?`<button class="muted-btn" style="padding:5px 8px;border-radius:7px;margin-left:5px" onclick="deleteGeneralComment(${c.id})">Moderate</button>`:''}</div>
+   </article>`;
+ }).join(''):'<div class="discussion-empty">💬 No council posts yet. Start the conversation.</div>';
+ const me=document.getElementById('discussionAvatar');
+ if(me)me.textContent=initialsFor(profile);
+}
+async function addGeneralComment(){
+ if(!currentUser)return;
+ const el=document.getElementById('generalComment');
+ const content=el?.value.trim();
+ if(!content)return;
+ if(content.length>2000)return alert('Keep posts under 2,000 characters.');
+ const {error}=await db.from('comments').insert({target_type:'general',target_id:1,content,user_id:currentUser.id});
+ if(error)return alert(error.message);
+ await activity('Posted in council discussion');
+ el.value='';
+ await renderGeneralDiscussion();
+ showToast('Posted to Council Discussion.');
+}
+async function deleteGeneralComment(id){
+ const {error}=await db.from('comments').delete().eq('id',id);
+ if(error)return alert(error.message);
+ await activity(isAdmin()?'Moderated a council discussion post':'Deleted a council discussion post');
+ await renderGeneralDiscussion();
+}
 
 async function renderAttendance(meetingId){const box=document.getElementById('attendance-'+meetingId);if(!box)return;const {data}=await db.from('meeting_attendance').select('*').eq('meeting_id',meetingId);const rows=data||[];const me=rows.find(x=>x.user_id===currentUser.id);const counts={present:rows.filter(x=>x.status==='present').length,absent:rows.filter(x=>x.status==='absent').length,excused:rows.filter(x=>x.status==='excused').length};box.innerHTML=`<div class="meta">Present ${counts.present} • Absent ${counts.absent} • Excused ${counts.excused}</div><div class="actions" style="margin-top:8px"><button class="success" onclick="setAttendance(${meetingId},'present')">Present</button><button class="muted-btn" onclick="setAttendance(${meetingId},'absent')">Absent</button><button class="secondary" onclick="setAttendance(${meetingId},'excused')">Excused</button></div><div class="meta" style="margin-top:6px">Your status: ${me?.status||'Not marked'}</div>`}
 async function setAttendance(meetingId,status){const {error}=await db.from('meeting_attendance').upsert({meeting_id:meetingId,user_id:currentUser.id,status},{onConflict:'meeting_id,user_id'});if(error)return alert(error.message);await activity('Updated meeting attendance',`${meetingId}: ${status}`);await renderAll()}
